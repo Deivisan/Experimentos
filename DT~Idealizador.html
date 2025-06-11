@@ -1,0 +1,1857 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeiviTech - Consultoria e Desenvolvimento com I.A.</title>
+
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* bg-gray-900 */
+            color: #e5e7eb; /* gray-200 */
+        }
+        .text-gradient {
+            background-image: linear-gradient(to right, #22d3ee, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        /* Custom scrollbar */
+        html {
+            scrollbar-width: thin; /* Firefox */
+            scrollbar-color: #0891b2 #1f2937; /* Firefox: thumb track */
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1f2937; /* bg-gray-800 */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #0891b2; /* cyan-600 */
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #06b6d4; /* cyan-500 */
+        }        .service-card { /* Para garantir altura consistente nos cards de serviço */
+            display: flex;
+            flex-direction: column;
+            height: 100%; /* Faz o card ocupar toda a altura do contêiner do grid */
+        }
+        .service-card-content {
+            flex-grow: 1; /* Faz o conteúdo crescer para preencher o espaço */
+        }
+        .modal-checkbox-label {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            background-color: #1f2937; /* bg-gray-800 */
+            border-radius: 6px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            border: 1px solid #374151; /* bg-gray-700 */
+            transition: background-color 0.2s;
+        }
+        .modal-checkbox-label:hover {
+            background-color: #374151; /* bg-gray-700 */
+        }        .modal-checkbox-label input[type="checkbox"] {
+            margin-right: 10px;
+            accent-color: #22d3ee; /* cyan-400 */
+        }        /* Efeito de raios futurista melhorado */
+        .lightning-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            overflow: hidden;
+        }
+
+        .lightning-effect.active {
+            opacity: 1;
+        }
+
+        .lightning-bolt {
+            position: absolute;
+            width: 6px;
+            background: linear-gradient(45deg, #22d3ee, #06b6d4, #0891b2, #ffffff);
+            box-shadow: 
+                0 0 20px #22d3ee, 
+                0 0 40px #06b6d4,
+                0 0 60px #0891b2,
+                0 0 80px rgba(34, 211, 238, 0.5);
+            transform-origin: top;
+            animation: lightning-strike 2s ease-out forwards;
+            border-radius: 2px;
+        }
+
+        @keyframes lightning-strike {
+            0% {
+                height: 0;
+                opacity: 1;
+                transform: scaleX(1) rotate(0deg);
+                box-shadow: 0 0 20px #22d3ee;
+            }
+            20% {
+                height: 40vh;
+                opacity: 0.9;
+                transform: scaleX(2) rotate(1deg);
+                box-shadow: 0 0 40px #22d3ee, 0 0 80px #06b6d4;
+            }
+            50% {
+                height: 100vh;
+                opacity: 0.8;
+                transform: scaleX(1.5) rotate(-0.5deg);
+                box-shadow: 0 0 60px #22d3ee, 0 0 120px #06b6d4, 0 0 200px rgba(34, 211, 238, 0.3);
+            }
+            80% {
+                height: 100vh;
+                opacity: 0.4;
+                transform: scaleX(1) rotate(0.5deg);
+                box-shadow: 0 0 40px #22d3ee, 0 0 80px #06b6d4;
+            }
+            100% {
+                height: 100vh;
+                opacity: 0;
+                transform: scaleX(0.5) rotate(0deg);
+                box-shadow: 0 0 20px #22d3ee;
+            }
+        }
+
+        .lightning-bolt:nth-child(1) {
+            width: 8px;
+            animation-duration: 2.2s;
+        }
+
+        .lightning-bolt:nth-child(2) {
+            width: 4px;
+            animation-duration: 1.8s;
+        }
+
+        .lightning-bolt:nth-child(3) {
+            width: 5px;
+            animation-duration: 2.5s;
+        }
+
+        .lightning-bolt:nth-child(4) {
+            width: 7px;
+            animation-duration: 1.9s;
+        }
+
+        .lightning-bolt:nth-child(5) {
+            width: 6px;
+            animation-duration: 2.1s;
+        }
+
+        /* Efeito adicional de flash na tela */
+        .lightning-effect.active::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(34, 211, 238, 0.1) 0%, transparent 70%);
+            animation: screen-flash 0.5s ease-out;
+        }
+
+        @keyframes screen-flash {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body class="text-white selection:bg-cyan-500 selection:text-black">    <!-- Fundo Dinâmico (Canvas do three.js será injetado aqui) -->
+    <div id="dynamic-background" class="fixed top-0 left-0 w-full h-full -z-10"></div>
+
+    <!-- Efeito de raios -->
+    <div id="lightning-effect" class="lightning-effect">
+        <div class="lightning-bolt"></div>
+        <div class="lightning-bolt"></div>
+        <div class="lightning-bolt"></div>
+        <div class="lightning-bolt"></div>
+        <div class="lightning-bolt"></div>
+    </div>
+
+    <!-- Navegação -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-gray-900/50 backdrop-blur-md border-b border-cyan-400/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="#hero" class="text-2xl font-bold text-white">Deivi<span class="text-cyan-400">Tech</span></a>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#about" class="text-gray-300 hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Sobre</a>
+                        <a href="#services" class="text-gray-300 hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Capacidades</a>
+                        <a href="#career-boost" class="text-gray-300 hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Impulso na Carreira</a>
+                        <a href="#results" class="text-gray-300 hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Resultados</a>
+                        <a href="#demo" class="text-gray-300 hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Simulador</a>
+                        <a href="#contact" class="bg-cyan-500/10 text-cyan-300 hover:bg-cyan-500/20 px-3 py-2 rounded-md text-sm font-medium transition-colors border border-cyan-500">Contato & I.A.</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Seção Hero -->
+        <section id="hero" class="relative min-h-screen flex items-center justify-center text-center overflow-hidden px-4">
+            <div class="relative z-10">
+                <h1 class="text-5xl md:text-7xl font-extrabold text-white tracking-tighter mb-4">
+                    Transformando Ideias<br /> <span class="text-gradient">em Realidade Digital</span>
+                </h1>
+                <p class="max-w-3xl mx-auto text-lg md:text-xl text-gray-300 mb-8">
+                    Fornecendo a base tecnológica e a inteligência artificial para alavancar seus projetos. Da automação de processos ao desenvolvimento de soluções inovadoras, incluindo mentoria de carreira e otimização de currículos.
+                </p>                <a href="#contact" id="explore-idea-btn" class="bg-cyan-500 text-white font-bold py-3 px-8 rounded-full hover:bg-cyan-600 transition duration-300 transform hover:scale-105 shadow-lg shadow-cyan-500/30">
+                    Explore sua Ideia com I.A.
+                </a>
+            </div>
+        </section>
+
+        <!-- Seção Sobre -->
+        <section id="about" class="py-20 bg-gray-900">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8 mx-auto mb-4 text-cyan-400"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                <h2 class="text-4xl font-bold text-white mb-2">Da Infraestrutura à Inovação</h2>
+                <p class="text-lg text-cyan-400 mb-8">Construindo a base para o desenvolvimento de soluções</p>
+                <p class="text-gray-300 text-xl leading-relaxed text-left md:text-center">
+                    Minha jornada profissional, de uma base sólida em infraestrutura e suporte, evoluiu para uma paixão pelo desenvolvimento de sistemas. Essa trajetória me deu uma visão única: entender os fundamentos para construir o futuro. Hoje, meu foco é usar essa experiência para criar soluções de software eficientes, resilientes e inteligentes para <strong class="text-cyan-400">Android, Windows e Linux</strong>, transformando desafios complexos em ferramentas que geram valor real. Ofereço também <strong class="text-cyan-400">mentoria de carreira</strong> e consultoria para otimizar seu perfil profissional.
+                </p>
+            </div>
+        </section>
+        
+        <!-- Seção de Serviços/Capacidades -->
+        <section id="services" class="py-20 bg-gray-800">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="text-4xl font-bold text-white mb-2">Capacidades Tecnológicas e Consultoria</h2>
+                <p class="text-lg text-cyan-400 mb-12">Como posso alavancar seu projeto e sua carreira.</p>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Card Desenvolvimento Multiplataforma (Ajustado) -->
+                    <div class="service-card bg-gray-900/50 border border-cyan-400/20 rounded-xl p-8 transform hover:-translate-y-2 transition-transform duration-300 shadow-lg hover:shadow-cyan-500/20">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8 mb-4 text-cyan-400"><path d="M10 20l4-16m4 16l-4-16M1 12h22"/></svg>
+                        <div class="service-card-content">
+                            <h3 class="text-2xl font-bold text-white mb-4">Desenvolvimento Multiplataforma</h3>
+                            <p class="text-gray-400">Criação de sistemas e apps personalizados para Android, Windows e Linux, garantindo performance e integração.</p>
+                        </div>
+                    </div>
+                    <div class="service-card bg-gray-900/50 border border-cyan-400/20 rounded-xl p-8 transform hover:-translate-y-2 transition-transform duration-300 shadow-lg hover:shadow-cyan-500/20">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8 mb-4 text-cyan-400"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                        <div class="service-card-content">
+                            <h3 class="text-2xl font-bold text-white mb-4">Automação Inteligente</h3>
+                            <p class="text-gray-400">Scripts (PowerShell, Python) para automatizar processos, eliminar tarefas repetitivas e otimizar seu tempo.</p>
+                        </div>
+                    </div>
+                    <div class="service-card bg-gray-900/50 border border-cyan-400/20 rounded-xl p-8 transform hover:-translate-y-2 transition-transform duration-300 shadow-lg hover:shadow-cyan-500/20">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8 mb-4 text-cyan-400"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+                        <div class="service-card-content">
+                            <h3 class="text-2xl font-bold text-white mb-4">Otimização de Sistemas</h3>
+                            <p class="text-gray-400">Análise e otimização de sistemas e fluxos para máxima eficiência, segurança e escalabilidade.</p>
+                        </div>
+                    </div>
+                    <div class="service-card bg-gray-900/50 border border-cyan-400/20 rounded-xl p-8 transform hover:-translate-y-2 transition-transform duration-300 shadow-lg hover:shadow-cyan-500/20">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8 mb-4 text-cyan-400"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>
+                        <div class="service-card-content">
+                            <h3 class="text-2xl font-bold text-white mb-4">Mentoria e Carreira</h3>
+                            <p class="text-gray-400">Consultoria de carreira, otimização de currículos e LinkedIn, e tudo que um PC pode fazer para impulsionar seu perfil profissional.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-12 text-center">
+                    <h3 class="text-3xl font-bold text-white mb-4">Idealização de Projetos e Orçamento Grátis</h3>
+                    <p class="text-lg text-gray-300 max-w-2xl mx-auto">
+                        Tem uma ideia? Ofereço uma <strong class="text-cyan-400">idealização gratuita</strong> do seu projeto. Você receberá uma demonstração em PDF, com descrições, infográficos e o potencial da sua ideia, antes de qualquer contratação. Assim, você visualiza o que pode ser feito!
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Impulso na Carreira (Reimaginada) -->
+        <section id="career-boost" class="py-20 bg-gray-900">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-10 w-10 mx-auto mb-6 text-cyan-400"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                <h2 class="text-4xl font-bold text-white mb-3">O Salto Quântico da sua Carreira com a Tecnologia</h2>
+                <p class="text-lg text-cyan-400 mb-10">Visualize a transformação: do anonimato ao protagonismo digital.</p>
+                  <!-- Analisador Interativo de Profissão com I.A. -->
+                <div class="bg-gray-800/50 p-6 rounded-xl border border-cyan-400/20 mb-12">                    <h3 class="text-2xl font-bold text-white mb-4 text-center">🤖 Análise de Impacto Tecnológico por Profissão</h3>
+                    <p class="text-gray-400 mb-6 text-center">Digite sua profissão e veja como a tecnologia pode transformar sua carreira especificamente!</p>
+                    
+                    <div class="flex flex-col md:flex-row gap-4 items-end mb-6">
+                        <div class="flex-grow">
+                            <label for="profession-input" class="block text-sm font-medium text-gray-300 mb-2">Sua Profissão</label>
+                            <input type="text" id="profession-input" placeholder="Ex: Contador, Designer, Engenheiro, Professor..." 
+                                   class="w-full bg-gray-700 text-white p-3 rounded-lg border border-gray-600 focus:ring-2 focus:ring-cyan-500 focus:outline-none transition" />
+                        </div>                        <button id="analyze-profession-btn" class="bg-gradient-to-r from-cyan-500 to-purple-500 text-white font-bold py-3 px-6 rounded-lg hover:opacity-90 transition duration-300 flex items-center justify-center">
+                            <i class="fas fa-brain mr-2"></i> Analisar com I.A.
+                        </button>
+                    </div>
+                    
+                    <!-- Resultado da Análise -->
+                    <div id="profession-analysis-result" class="hidden">
+                        <!-- Loader -->
+                        <div id="profession-loader" class="hidden">
+                            <div class="flex justify-center items-center space-x-2 my-8">
+                                <div class="w-4 h-4 rounded-full bg-cyan-400 animate-pulse"></div>
+                                <div class="w-4 h-4 rounded-full bg-cyan-400 animate-pulse" style="animation-delay: 0.2s;"></div>
+                                <div class="w-4 h-4 rounded-full bg-cyan-400 animate-pulse" style="animation-delay: 0.4s;"></div>
+                            </div>
+                            <p class="text-center text-gray-400 mt-4">Analisando o impacto tecnológico na sua profissão... Por favor, aguarde.</p>
+                        </div>
+                        
+                        <!-- Gráfico e Análise -->
+                        <div id="profession-analysis-content" class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="text-lg font-bold text-white mb-3">Impacto por Tecnologia</h4>
+                                <canvas id="professionImpactChart" class="max-h-80"></canvas>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-bold text-white mb-3">Análise Detalhada</h4>
+                                <div id="profession-analysis-text" class="text-gray-300 text-sm leading-relaxed max-h-80 overflow-y-auto">
+                                    <!-- Análise textual da I.A. será inserida aqui -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8 mb-12 text-left">
+                    <div class="bg-gray-800/50 p-6 rounded-xl border border-cyan-400/20">
+                        <h4 class="text-xl font-bold text-red-400 mb-2"><i class="fas fa-hourglass-start mr-2"></i>Sem Presença Digital Estratégica</h4>
+                        <p class="text-gray-400 mb-1"><strong class="text-gray-300">Visibilidade:</strong> Limitada ao networking físico.</p>
+                        <p class="text-gray-400 mb-1"><strong class="text-gray-300">Oportunidades:</strong> Menos frequentes, baseadas em indicações.</p>
+                        <p class="text-gray-400 mb-1"><strong class="text-gray-300">Credibilidade:</strong> Difícil de demonstrar proativamente.</p>
+                        <p class="text-gray-400"><strong class="text-gray-300">Impacto:</strong> Estagnação e potencial subutilizado.</p>
+                    </div>
+                    <div class="bg-gray-800/50 p-6 rounded-xl border border-cyan-400/20">
+                        <h4 class="text-xl font-bold text-green-400 mb-2"><i class="fas fa-rocket mr-2"></i>Com Presença Digital Estratégica</h4>
+                        <p class="text-gray-400 mb-1"><strong class="text-gray-300">Visibilidade:</strong> Global, 24/7 através de portfólio, site, I.A.</p>
+                        <p class="text-gray-400 mb-1"><strong class="text-gray-300">Oportunidades:</strong> Aumento exponencial, prospecção ativa.</p>
+                        <p class="text-gray-400 mb-1"><strong class="text-gray-300">Credibilidade:</strong> Fortalecida por projetos, automações e soluções.</p>
+                        <p class="text-gray-400"><strong class="text-gray-300">Impacto:</strong> Crescimento acelerado e reconhecimento.</p>
+                    </div>
+                </div>
+
+                <p class="text-gray-300 text-xl leading-relaxed mb-6 max-w-3xl mx-auto">
+                    Um website profissional, um perfil no GitHub bem curado, ou até mesmo um aplicativo que demonstre suas capacidades, são mais do que simples ferramentas: são <strong class="text-cyan-400">amplificadores da sua carreira</strong>. Eles mostram iniciativa, profissionalismo e paixão pela sua área.
+                </p>
+                
+                <div class="grid md:grid-cols-2 gap-10 items-start my-12">
+                    <div class="text-left bg-gray-800/50 p-6 rounded-xl border border-cyan-400/20">
+                        <h3 class="text-2xl font-semibold text-white mb-4">Etapas para um Perfil de Sucesso:</h3>
+                        <ul class="space-y-3 text-gray-300">
+                            <li><i class="fas fa-user-tie text-cyan-400 mr-2"></i><strong class="text-white">Definição de Marca Pessoal:</strong> Entender seus pontos fortes e objetivos.</li>
+                            <li><i class="fas fa-globe text-cyan-400 mr-2"></i><strong class="text-white">Criação de Portfólio Online:</strong> Website pessoal ou perfil em plataformas (GitHub, Behance).</li>
+                            <li><i class="fas fa-lightbulb text-cyan-400 mr-2"></i><strong class="text-white">Desenvolvimento de Conteúdo Relevante:</strong> Artigos, projetos, estudos de caso.</li>
+                            <li><i class="fas fa-search text-cyan-400 mr-2"></i><strong class="text-white">Otimização para Buscas (SEO Pessoal):</strong> Ser encontrado por quem importa.</li>
+                            <li><i class="fas fa-users text-cyan-400 mr-2"></i><strong class="text-white">Networking Estratégico Online:</strong> Conectar-se com profissionais da área.</li>
+                             <li><i class="fas fa-cogs text-cyan-400 mr-2"></i><strong class="text-white">Integração de I.A. e Automação:</strong> Demonstrar habilidades com ferramentas modernas.</li>
+                        </ul>
+                    </div>
+                     <div class="bg-gray-800/50 p-6 rounded-xl border border-cyan-400/20">
+                        <h4 class="text-xl font-bold text-white mb-3">Impacto Visualizado: Crescimento Potencial</h4>
+                        <p class="text-gray-400 mb-4">Estimativa do aumento de visibilidade e oportunidades.</p>
+                        <canvas id="careerGrowthChart" class="max-h-80"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Resultados Comprovados (Expandida) -->
+        <section id="results" class="py-20 bg-gray-800">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                 <h2 class="text-4xl font-bold text-white mb-2">Resultados Tangíveis da Transformação Digital</h2>
+                 <p class="text-lg text-cyan-400 mb-12">Como a tecnologia impulsiona o alcance, eficiência e conversão.</p>
+                 <div class="grid md:grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="bg-gray-900/50 p-8 rounded-xl border border-cyan-400/20">
+                        <h3 class="text-2xl font-semibold text-white mb-4">Alcance de Mercado Ampliado</h3>
+                        <canvas id="marketReachChart" class="max-h-72"></canvas>
+                        <p class="text-gray-400 mt-4 text-sm">Comparativo do alcance potencial de um profissional/negócio com e sem uma presença digital otimizada (website, SEO, redes sociais).</p>
+                    </div>
+                    <div class="bg-gray-900/50 p-8 rounded-xl border border-cyan-400/20">
+                        <h3 class="text-2xl font-semibold text-white mb-4">Eficiência Operacional com I.A.</h3>
+                        <canvas id="operationalEfficiencyChart" class="max-h-72"></canvas>
+                        <p class="text-gray-400 mt-4 text-sm">Redução de tempo em tarefas manuais versus o uso de automação e ferramentas de I.A. para otimização de processos.</p>
+                    </div>
+                     <div class="bg-gray-900/50 p-8 rounded-xl border border-cyan-400/20">
+                        <h3 class="text-2xl font-semibold text-white mb-4">Engajamento e Conversão</h3>
+                        <canvas id="engagementConversionChart" class="max-h-72"></canvas>
+                        <p class="text-gray-400 mt-4 text-sm">Aumento na taxa de engajamento e conversão de leads ao utilizar plataformas digitais interativas e personalizadas (apps, landing pages com I.A.).</p>
+                    </div>
+                 </div>
+            </div>
+        </section>
+
+        <!-- Seção Simulador de Soluções (Reimaginada) -->
+        <section id="demo" class="py-20 bg-gray-900">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8 mx-auto mb-4 text-cyan-400"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+                <h2 class="text-4xl font-bold text-white mb-2">Simulador de Impacto Tecnológico</h2>
+                <p class="text-lg text-cyan-400 mb-12">Selecione um cenário e veja o potencial de transformação.</p>
+                <div class="grid md:grid-cols-3 gap-8 items-start">
+                    <div id="scenario-selector" class="md:col-span-1 flex flex-col gap-4">
+                        <h3 class="text-2xl font-bold text-white mb-2 text-left">1. Escolha o Cenário</h3>
+                        <!-- Botões serão gerados por JS -->
+                    </div>
+                    <div class="md:col-span-2 bg-gray-800/50 border border-cyan-400/20 rounded-xl p-8 sticky top-24">
+                         <h3 class="text-2xl font-bold text-white mb-4 text-left">2. Transformação e Resultados</h3>
+                         <div class="mb-6 text-left">
+                            <p class="text-gray-300">Cenário Selecionado:</p>
+                            <p id="scenario-title" class="text-xl font-bold text-white">...</p>
+                            <p class="text-gray-300 mt-2">Solução Proposta com DeiviTech:</p>
+                            <p id="scenario-solution-tech" class="text-md text-cyan-400">...</p>
+                         </div>
+                         <canvas id="scenarioImpactChart" class="max-h-80"></canvas>
+                         <p id="scenario-explanation" class="text-gray-400 mt-4 text-sm"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Contato e I.A. -->
+        <section id="contact" class="py-20 bg-gray-800">
+            <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="text-4xl font-bold text-white mb-2">Transforme Sua Ideia em Ação</h2>
+                <p class="text-lg text-cyan-400 mb-12">Descreva sua visão abaixo para que a I.A. da DeiviTech crie um esboço inicial, ou envie sua mensagem diretamente.</p>
+                
+                <form id="contact-form" class="space-y-4">
+                    <input type="text" id="contact-name" name="name" placeholder="Seu Nome" class="w-full bg-gray-700 text-white p-3 rounded-lg border border-gray-600 focus:ring-2 focus:ring-cyan-500 focus:outline-none transition" />
+                    <input type="email" id="contact-email" name="email" placeholder="Seu E-mail (Opcional para WhatsApp, Obrigatório para envio por E-mail)" class="w-full bg-gray-700 text-white p-3 rounded-lg border border-gray-600 focus:ring-2 focus:ring-cyan-500 focus:outline-none transition" />
+                    <input type="tel" id="contact-phone" name="phone" placeholder="Seu WhatsApp/Telegram (Ex: 75981231019)" class="w-full bg-gray-700 text-white p-3 rounded-lg border border-gray-600 focus:ring-2 focus:ring-cyan-500 focus:outline-none transition" required />
+                    <textarea id="message-input" name="message" placeholder="Descreva sua ideia, necessidade ou projeto..." rows="5" class="w-full bg-gray-700 text-white p-3 rounded-lg border border-gray-600 focus:ring-2 focus:ring-cyan-500 focus:outline-none transition" required></textarea>
+                      <button type="button" id="expand-idea-btn" class="w-full bg-gradient-to-r from-cyan-500 to-purple-500 text-white font-bold py-3 px-6 rounded-full hover:opacity-90 transition duration-300 transform hover:scale-105 shadow-lg shadow-cyan-500/20 flex items-center justify-center">
+                        <i class="fas fa-lightbulb mr-2"></i> Expandir Ideia com I.A. (DeiviTech)
+                    </button>
+                    
+                    <p class="text-sm text-gray-400">Após expandir com I.A., você poderá enviar o resultado por WhatsApp ou E-mail.</p>
+
+                    <button type="button" id="send-manual-idea-btn" class="w-full bg-gray-600 text-white font-bold py-3 px-6 rounded-full hover:bg-gray-700 transition duration-300 mt-4 flex items-center justify-center">
+                        <i class="fas fa-paper-plane mr-2"></i> Enviar Ideia Manualmente
+                    </button>
+                    <p class="text-xs text-gray-500">O envio manual usará o Formspree (requer configuração) ou abrirá opções de WhatsApp/Email.</p>
+                </form>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Modal de Resposta da I.A. -->
+    <div id="ai-response-modal" class="fixed inset-0 bg-black bg-opacity-80 z-[100] hidden flex items-center justify-center p-4 transition-opacity duration-300">
+        <div class="bg-gray-800 rounded-xl p-6 md:p-8 border border-cyan-400/30 max-w-3xl w-full max-h-[90vh] flex flex-col">            <div class="flex justify-between items-center mb-4 flex-shrink-0">
+                <h3 class="text-2xl font-bold text-gradient">Esboço da Sua Ideia por DeiviTech I.A.</h3>
+                <button id="close-ai-modal" class="text-gray-400 text-4xl leading-none hover:text-white">&times;</button>
+            </div>
+            
+            <div class="overflow-y-auto pr-4 -mr-4 mb-4 flex-grow">                 <!-- Loader -->
+                <div id="ai-loader" class="hidden">
+                    <div class="text-center mb-6">
+                        <div class="w-16 h-16 mx-auto mb-4 relative">
+                            <svg class="w-16 h-16 animate-spin" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <span id="ai-progress-percent" class="text-cyan-400 font-bold text-sm">0%</span>
+                            </div>
+                        </div>
+                        <div class="w-full bg-gray-700 rounded-full h-3 mb-4">
+                            <div id="ai-progress-bar" class="bg-gradient-to-r from-cyan-500 to-purple-500 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                        <p id="ai-progress-text" class="text-center text-gray-400">Analisando sua ideia...</p>
+                    </div>
+                </div>
+
+                <!-- Conteúdo da Resposta -->
+                <div id="ai-response-content" class="text-gray-300 leading-relaxed prose prose-invert prose-strong:text-cyan-400 prose-headings:text-white">
+                    <!-- O conteúdo gerado pela I.A. será inserido aqui -->
+                </div>
+            </div>            <div class="flex-shrink-0 space-y-3">
+                <div class="flex space-x-2">
+                    <button id="regenerate-idea-btn" class="flex-1 bg-gray-600 text-white font-bold py-2 px-3 rounded-full hover:bg-gray-700 transition duration-300 flex items-center justify-center text-xs">
+                        <i class="fas fa-sync-alt mr-1"></i> Gerar mais ideias (até 3)
+                    </button>
+                    <button id="generate-5-creative-ideas-btn" class="flex-1 bg-purple-600 text-white font-bold py-2 px-3 rounded-full hover:bg-purple-700 transition duration-300 flex items-center justify-center text-xs">
+                        <i class="fas fa-magic mr-1"></i> Gerar 5 ideias criativas
+                    </button>
+                </div>
+                <button id="send-ai-idea-btn" class="w-full bg-green-500 text-white font-bold py-2 px-4 rounded-full hover:bg-green-600 transition duration-300 flex items-center justify-center text-sm">
+                    <i class="fas fa-paper-plane mr-2"></i> Enviar esta Ideia
+                </button>
+                 <p class="text-xs text-gray-400 text-center">Ao enviar, você poderá escolher entre WhatsApp ou E-mail. Selecione os tópicos acima que deseja incluir. O ideal são 5 tópicos para análise completa.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Opções de Envio -->
+    <div id="send-options-modal" class="fixed inset-0 bg-black bg-opacity-80 z-[101] hidden flex items-center justify-center p-4">
+        <div class="bg-gray-800 rounded-xl p-8 border border-cyan-400/30 max-w-md w-full">
+            <h3 class="text-xl font-bold text-white mb-6 text-center">Como você prefere enviar sua ideia?</h3>
+            <div class="space-y-4">
+                <button id="send-via-whatsapp-btn" class="w-full bg-green-500 text-white font-bold py-3 px-6 rounded-full hover:bg-green-600 transition duration-300 flex items-center justify-center">
+                    <i class="fab fa-whatsapp mr-2"></i> Enviar por WhatsApp
+                </button>
+                <button id="send-via-email-btn" class="w-full bg-blue-500 text-white font-bold py-3 px-6 rounded-full hover:bg-blue-600 transition duration-300 flex items-center justify-center">
+                    <i class="fas fa-envelope mr-2"></i> Enviar por E-mail
+                </button>
+            </div>
+            <button id="close-send-options-modal" class="mt-6 w-full text-gray-400 hover:text-white transition">Cancelar</button>
+        </div>
+    </div>
+
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 border-t border-cyan-400/20 py-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-400">
+            <div class="mb-6">
+                <h4 class="text-xl font-semibold text-white mb-2">Conheça o Idealizador</h4>
+                <p class="mb-1">Deivison Santana - Analista de Sistemas e Desenvolvedor.</p>
+                <a href="https://github.com/Deivisan/" target="_blank" rel="noopener noreferrer" class="text-cyan-400 hover:text-cyan-300 transition-colors text-2xl inline-flex items-center">
+                    <i class="fab fa-github mr-2"></i> Perfil no GitHub
+                </a>
+            </div>
+            <div class="mb-6">
+                <h4 class="text-lg font-semibold text-white mb-2">Outros Projetos</h4>
+                <a href="https://deivisan.github.io/DeiviTech-Monte-Seu-Notebook/info-projeto.html" target="_blank" rel="noopener noreferrer" class="text-cyan-400 hover:text-cyan-300 transition-colors">
+                    DeiviTech - Monte Seu Notebook
+                </a>
+            </div>
+            <p>&copy; <span id="year"></span> Deivison Santana. Todos os direitos reservados.</p>
+            <p class="text-sm">Construído com HTML, JavaScript, three.js, Chart.js & Tailwind CSS.</p>
+        </div>
+    </footer>
+
+    <!-- Bibliotecas JS via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Script Principal da Página -->
+    <script type="module">
+        // --- ESTADO GLOBAL E CONSTANTES ---
+        const MY_WHATSAPP_NUMBER = "5575981231019";
+        const MY_EMAIL_ADDRESS = "deivilsantana@outlook.com";
+        const GEMINI_API_KEY = "AIzaSyBVJI8lkr2QTl1u7FWUjo5au2GGp7EhxFM"; // LEMBRE-SE DE PROTEGER ESTA CHAVE!        const FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID"; // SUBSTITUA PELO SEU ID REAL
+        
+        let lastAiResponseRaw = ""; // Armazena a resposta crua da I.A.
+        let currentMessageToSend = ""; // Armazena a mensagem (manual ou I.A.) para envio
+        let currentSendMethod = ""; // 'whatsapp' ou 'email'
+        let targetTopicCount = 3; // Número de tópicos que a I.A. deve gerar (padrão: 3)// --- INICIALIZAÇÃO GERAL ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Seta o ano no rodapé
+            document.getElementById('year').textContent = new Date().getFullYear();
+
+            // Inicia todas as funcionalidades
+            initDynamicBackground();
+            initLightningEffect(); // Novo efeito de raios
+            initCareerBoostFeatures(); // Atualizado
+            initResultsCharts(); // Atualizado
+            initScenarioSimulator(); // Atualizado
+            initGeminiFeature();
+            initContactFormAndSendOptions(); // Atualizado
+        });
+
+        // --- 1. FUNDO DINÂMICO (THREE.JS) ---
+        function initDynamicBackground() {
+            const mount = document.getElementById('dynamic-background');
+            if (!mount) return;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, mount.clientWidth / mount.clientHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+
+            renderer.setSize(mount.clientWidth, mount.clientHeight);
+            mount.appendChild(renderer.domElement);
+            camera.position.z = 50;
+
+            const particleCount = 5000;
+            const particlesGeometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+
+            for (let i = 0; i < particleCount * 3; i++) {
+                positions[i] = (Math.random() - 0.5) * 500;
+            }
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.15,
+                color: '#06b6d4', // cyan-500
+                transparent: true,
+                blending: THREE.AdditiveBlending,
+            });
+
+            const particleSystem = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particleSystem);
+
+            let mouseX = 0, mouseY = 0;
+            const onMouseMove = (event) => {
+                mouseX = event.clientX - (window.innerWidth / 2);
+                mouseY = event.clientY - (window.innerHeight / 2);
+            };
+            document.addEventListener('mousemove', onMouseMove);
+
+            const animate = () => {
+                requestAnimationFrame(animate);
+                particleSystem.rotation.y += 0.0001;
+                particleSystem.rotation.x += 0.0001;
+                camera.position.x += (mouseX * 0.0001 - camera.position.x) * 0.02;
+                camera.position.y += (-mouseY * 0.0001 - camera.position.y) * 0.02;
+                camera.lookAt(scene.position);
+                renderer.render(scene, camera);
+            };
+            animate();
+
+            const handleResize = () => {
+                if (mount) {
+                    camera.aspect = mount.clientWidth / mount.clientHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(mount.clientWidth, mount.clientHeight);
+                }
+            };
+            window.addEventListener('resize', handleResize);
+        }        // --- EFEITO DE RAIOS FUTURISTA ---
+        function initLightningEffect() {
+            const exploreBtn = document.getElementById('explore-idea-btn');
+            const lightningContainer = document.getElementById('lightning-effect');
+            
+            if (exploreBtn && lightningContainer) {
+                exploreBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Ativa o efeito de raios imediatamente
+                    triggerLightningEffect();
+                    
+                    // Faz scroll completo após pequeno delay para o efeito começar
+                    setTimeout(() => {
+                        // Scroll suave e completo até a seção de contato
+                        const contactSection = document.getElementById('contact');
+                        if (contactSection) {
+                            contactSection.scrollIntoView({ 
+                                behavior: 'smooth',
+                                block: 'start' // Garante que vai para o topo da seção
+                            });
+                        }
+                    }, 300); // Delay menor para começar o scroll rapidamente
+                });
+            }
+        }        function triggerLightningEffect() {
+            const lightningContainer = document.getElementById('lightning-effect');
+            const bolts = lightningContainer.querySelectorAll('.lightning-bolt');
+            
+            // Remove classe ativa primeiro para garantir reset
+            lightningContainer.classList.remove('active');
+            
+            // Force reflow para garantir que a animação seja resetada
+            lightningContainer.offsetHeight;
+            
+            // Reseta completamente todos os raios
+            bolts.forEach((bolt) => {
+                bolt.style.animation = 'none';
+                bolt.style.left = '';
+                bolt.style.height = '';
+                bolt.style.animationDelay = '';
+                bolt.style.animationDuration = '';
+                bolt.offsetHeight; // Force reflow para cada raio
+            });
+            
+            // Aguarda um frame antes de recriar os raios
+            requestAnimationFrame(() => {
+                // Posiciona os raios em locais aleatórios na tela toda
+                bolts.forEach((bolt, index) => {
+                    const randomLeft = Math.random() * 90 + 5; // Entre 5% e 95% para cobrir toda a tela
+                    const randomDelay = Math.random() * 0.8; // Delay aleatório
+                    const randomHeight = Math.random() * 20 + 80; // Altura variável dos raios
+                    const randomDuration = 1.5 + Math.random() * 0.5; // Duração variável
+                    
+                    // Aplica novas propriedades
+                    bolt.style.left = randomLeft + '%';
+                    bolt.style.height = randomHeight + 'vh';
+                    bolt.style.animationDelay = (index * 0.15 + randomDelay) + 's';
+                    bolt.style.animationDuration = randomDuration + 's';
+                    
+                    // Força nova classe para triggerar animação
+                    bolt.style.animation = `lightning-strike ${randomDuration}s ease-out forwards`;
+                });
+                
+                // Ativa o efeito
+                lightningContainer.classList.add('active');
+                
+                // Remove após a animação completa
+                setTimeout(() => {
+                    lightningContainer.classList.remove('active');
+                }, 3000);
+            });
+        }
+
+        // --- 2. IMPULSO NA CARREIRA (ANÁLISE DE PROFISSÃO COM I.A.) ---
+        function initCareerBoostFeatures() {
+            // Nova funcionalidade: Análise de Profissão com I.A.
+            const professionInput = document.getElementById('profession-input');
+            const analyzeProfessionBtn = document.getElementById('analyze-profession-btn');
+            const analysisResult = document.getElementById('profession-analysis-result');
+            const professionLoader = document.getElementById('profession-loader');
+            const analysisContent = document.getElementById('profession-analysis-content');
+            const analysisText = document.getElementById('profession-analysis-text');
+            const professionCtx = document.getElementById('professionImpactChart')?.getContext('2d');
+            
+            let professionChartInstance = null;
+
+            if (analyzeProfessionBtn && professionInput) {
+                analyzeProfessionBtn.addEventListener('click', () => {
+                    const profession = professionInput.value.trim();
+                    if (!profession) {
+                        alert('Por favor, digite sua profissão para análise.');
+                        professionInput.focus();
+                        return;
+                    }
+                    fetchProfessionAnalysis(profession);
+                });
+
+                // Permite análise ao pressionar Enter no campo de profissão
+                professionInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        analyzeProfessionBtn.click();
+                    }
+                });
+            }            async function fetchProfessionAnalysis(profession) {
+                if (!analysisResult || !professionLoader || !analysisContent || !analysisText) return;
+
+                analysisResult.classList.remove('hidden');
+                professionLoader.classList.remove('hidden');
+                analysisContent.classList.add('hidden');
+
+                const promptText = `
+Você é DeiviTech, um consultor especializado em transformação digital. Analise o texto "${profession}".
+
+PRIMEIRA ETAPA - VALIDAÇÃO:
+1. Este texto representa uma profissão real, carreira ou área de trabalho? 
+2. Se parece ser uma brincadeira, palavra ofensiva, ou texto nonsense, responda com humor mas seja educativo.
+3. Se for claramente uma profissão válida, prossiga com análise completa.
+
+SEGUNDA ETAPA - RESPOSTA:
+
+Se NÃO for uma profissão válida, responda EXATAMENTE assim:
+**PROFISSAO_INVALIDA:**
+true
+
+**RESPOSTA_EDUCATIVA:**
+[Resposta cômica mas educativa, sugerindo uma única tecnologia que poderia se relacionar vagamente com o texto, sempre mencionando DeiviTech]
+
+Se FOR uma profissão válida, varie o formato e ordem dos tópicos para não ser repetitivo. Use diferentes focos e abordagens:
+
+**IMPACTOS_TECNOLOGICOS:**
+[Varie a ordem! Às vezes comece com Apps, outras com I.A., outras com Websites. Use 4-6 categorias diferentes]
+[Exemplo de variações:]
+- I.A. e Machine Learning:[valor%]:descrição específica
+- Desenvolvimento Mobile:[valor%]:apps específicos para a área  
+- Automação e Scripts:[valor%]:automatizações específicas
+- Presença Digital:[valor%]:websites e portfolios
+- Análise de Dados:[valor%]:insights específicos
+- IoT e Sensores:[valor%]:dispositivos conectados (se aplicável)
+- E-commerce/Vendas:[valor%]:plataformas de venda (se aplicável)
+
+**ANALISE_DETALHADA:**
+[4-5 parágrafos específicos sobre como DeiviTech pode revolucionar esta profissão. VARIE A ABORDAGEM:
+- Às vezes foque primeiro em automação
+- Outras vezes comece com I.A. e análise de dados  
+- Varie entre apps mobile, websites, e-commerce
+- Seja MUITO específico para a profissão ${profession}
+- Sempre mencione soluções práticas que DeiviTech oferece]
+
+IMPORTANTE: NÃO siga sempre o mesmo padrão! Seja criativo e específico para "${profession}".
+                `.trim();
+
+                try {
+                    const payload = { contents: [{ role: "user", parts: [{ text: promptText }] }] };
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        const errorBody = await response.json().catch(() => ({ error: { message: response.statusText } }));
+                        throw new Error(`Erro na API Gemini: ${errorBody?.error?.message || response.statusText}.`);
+                    }
+
+                    const result = await response.json();
+
+                    if (result.candidates && result.candidates[0]?.content?.parts?.[0]?.text) {
+                        const aiResponse = result.candidates[0].content.parts[0].text;
+                        parseProfessionAnalysis(aiResponse, profession);
+                    } else {
+                        throw new Error("A resposta da I.A. foi inválida ou vazia.");
+                    }
+
+                } catch (error) {
+                    console.error("Erro ao analisar profissão:", error);
+                    analysisText.innerHTML = `<p class="text-red-400">Desculpe, ocorreu um erro ao analisar sua profissão. Tente novamente.</p><p class="text-sm text-gray-400 mt-2">Detalhe: ${error.message}</p>`;
+                    analysisContent.classList.remove('hidden');
+                } finally {
+                    professionLoader.classList.add('hidden');
+                }
+            }            function parseProfessionAnalysis(rawResponse, profession) {
+                // Verifica se é uma profissão inválida
+                const invalidProfessionMatch = rawResponse.match(/\*\*PROFISSAO_INVALIDA:\*\*\s*true/i);
+                const educativeResponseMatch = rawResponse.match(/\*\*RESPOSTA_EDUCATIVA:\*\*([\s\S]*)/);
+
+                if (invalidProfessionMatch && educativeResponseMatch) {
+                    // Resposta para profissão inválida - cria um gráfico humorístico
+                    const educativeText = educativeResponseMatch[1].trim();
+                    
+                    if (professionCtx) {
+                        if (professionChartInstance) {
+                            professionChartInstance.destroy();
+                        }
+
+                        // Gráfico humorístico para entradas inválidas
+                        const humorData = {
+                            labels: ['Criatividade', 'Humor', 'Potencial Tech', 'Necessidade de Profissão Real'],
+                            data: [90, 85, 30, 100]
+                        };
+
+                        professionChartInstance = new Chart(professionCtx, {
+                            type: 'doughnut',
+                            data: {
+                                labels: humorData.labels,
+                                datasets: [{
+                                    data: humorData.data,
+                                    backgroundColor: [
+                                        'rgba(34, 211, 238, 0.8)',
+                                        'rgba(168, 85, 247, 0.8)',
+                                        'rgba(245, 158, 11, 0.8)',
+                                        'rgba(239, 68, 68, 0.8)'
+                                    ],
+                                    borderColor: [
+                                        'rgba(34, 211, 238, 1)',
+                                        'rgba(168, 85, 247, 1)',
+                                        'rgba(245, 158, 11, 1)',
+                                        'rgba(239, 68, 68, 1)'
+                                    ],
+                                    borderWidth: 2
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: { 
+                                        display: true, 
+                                        position: 'bottom',
+                                        labels: { color: '#9ca3af', font: { size: 12 } }
+                                    },
+                                    title: { 
+                                        display: true, 
+                                        text: `Análise de "${profession}" 😄`, 
+                                        color: '#e5e7eb',
+                                        font: { size: 14, weight: 'bold' }
+                                    }
+                                },
+                                animation: {
+                                    duration: 1500,
+                                    easing: 'easeOutBounce'
+                                }
+                            }
+                        });
+                    }
+
+                    analysisText.innerHTML = `
+                        <div class="bg-yellow-900/30 border-l-4 border-yellow-400 p-4 rounded-lg mb-4">
+                            <h5 class="text-yellow-400 font-bold mb-2">😅 Ops! Vamos tentar de novo...</h5>
+                            <p class="text-gray-300">${educativeText}</p>
+                        </div>
+                        <div class="text-sm text-gray-400 mt-4">
+                            <p><strong>💡 Dica:</strong> Digite uma profissão real (ex: Contador, Designer, Engenheiro, Professor) para uma análise completa!</p>
+                        </div>
+                    `;
+                    analysisContent.classList.remove('hidden');
+                    return;
+                }
+
+                // Parse normal para profissões válidas
+                const techImpactMatch = rawResponse.match(/\*\*IMPACTOS_TECNOLOGICOS:\*\*([\s\S]*?)\*\*ANALISE_DETALHADA:\*\*/);
+                const analysisMatch = rawResponse.match(/\*\*ANALISE_DETALHADA:\*\*([\s\S]*)/);
+
+                let technologies = [];
+                let impacts = [];
+                let descriptions = [];
+                let analysisTextContent = "";
+
+                if (techImpactMatch) {
+                    const impactLines = techImpactMatch[1].trim().split('\n');
+                    impactLines.forEach(line => {
+                        const parts = line.split(':');
+                        if (parts.length >= 3) {
+                            const tech = parts[0].trim().replace(/^[-•*]\s*/, ''); // Remove marcadores
+                            const impact = parseInt(parts[1].trim()) || 0;
+                            const desc = parts.slice(2).join(':').trim();
+                            if (tech && impact > 0) {
+                                technologies.push(tech);
+                                impacts.push(impact);
+                                descriptions.push(desc);
+                            }
+                        }
+                    });
+                }
+
+                if (analysisMatch) {
+                    analysisTextContent = analysisMatch[1].trim();
+                }
+
+                // Fallback dinâmico e específico para a profissão
+                if (technologies.length === 0) {
+                    const fallbackOptions = [
+                        {
+                            techs: ['I.A. e Machine Learning', 'Apps Mobile Específicos', 'Presença Digital', 'Automação de Processos', 'Análise de Dados'],
+                            impacts: [90, 75, 85, 80, 70],
+                            descriptions: [
+                                `I.A. personalizada para otimizar decisões em ${profession}`,
+                                `Aplicativo mobile específico para profissionais de ${profession}`,
+                                `Website e portfólio digital para ${profession}`,
+                                `Automação de tarefas repetitivas na área de ${profession}`,
+                                `Análise de dados estratégica para ${profession}`
+                            ]
+                        },
+                        {
+                            techs: ['Websites Profissionais', 'Automação com Scripts', 'E-commerce e Vendas', 'I.A. para Insights', 'Sistemas Integrados'],
+                            impacts: [85, 78, 88, 82, 76],
+                            descriptions: [
+                                `Plataforma web avançada para ${profession}`,
+                                `Scripts Python/PowerShell para automatizar ${profession}`,
+                                `Plataforma de vendas online para ${profession}`,
+                                `I.A. para análises preditivas em ${profession}`,
+                                `Sistemas integrados para gestão em ${profession}`
+                            ]
+                        },
+                        {
+                            techs: ['IoT e Sensores', 'Apps Android/iOS', 'Chatbots I.A.', 'Dashboard Analytics', 'Cloud Computing'],
+                            impacts: [72, 86, 79, 84, 81],
+                            descriptions: [
+                                `Dispositivos IoT personalizados para ${profession}`,
+                                `App mobile nativo para ${profession}`,
+                                `Chatbot inteligente para atendimento em ${profession}`,
+                                `Dashboard com métricas específicas de ${profession}`,
+                                `Soluções em nuvem para ${profession}`
+                            ]
+                        }
+                    ];
+                    
+                    // Escolhe uma variação aleatória baseada no hash da profissão
+                    const professionHash = profession.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
+                    const selectedFallback = fallbackOptions[professionHash % fallbackOptions.length];
+                    
+                    technologies = selectedFallback.techs;
+                    impacts = selectedFallback.impacts;
+                    descriptions = selectedFallback.descriptions;
+                }
+
+                if (!analysisTextContent) {
+                    analysisTextContent = `A profissão de ${profession} tem um potencial imenso para transformação digital com as soluções da DeiviTech. Nossa abordagem personalizada inclui desenvolvimento de sistemas específicos, automação inteligente, criação de presença digital profissional e implementação de I.A. para otimização de processos. Com nossa consultoria especializada, profissionais de ${profession} podem alcançar novos patamares de eficiência, visibilidade no mercado e oportunidades de crescimento exponencial.`;
+                }
+
+                // Renderiza gráfico dinâmico
+                if (professionCtx && technologies.length > 0) {
+                    if (professionChartInstance) {
+                        professionChartInstance.destroy();
+                    }
+
+                    // Escolhe tipo de gráfico baseado no número de tecnologias
+                    const chartType = technologies.length <= 4 ? 'doughnut' : 'bar';
+                    const isHorizontal = technologies.length > 4;
+
+                    // Cores dinâmicas baseadas na profissão
+                    const colorSets = [
+                        ['rgba(34, 211, 238, 0.8)', 'rgba(168, 85, 247, 0.8)', 'rgba(16, 185, 129, 0.8)', 'rgba(245, 158, 11, 0.8)', 'rgba(239, 68, 68, 0.8)', 'rgba(99, 102, 241, 0.8)'],
+                        ['rgba(236, 72, 153, 0.8)', 'rgba(34, 197, 94, 0.8)', 'rgba(251, 146, 60, 0.8)', 'rgba(139, 92, 246, 0.8)', 'rgba(6, 182, 212, 0.8)', 'rgba(248, 113, 113, 0.8)'],
+                        ['rgba(14, 165, 233, 0.8)', 'rgba(168, 85, 247, 0.8)', 'rgba(34, 197, 94, 0.8)', 'rgba(251, 191, 36, 0.8)', 'rgba(239, 68, 68, 0.8)', 'rgba(156, 163, 175, 0.8)']
+                    ];
+                    const professionHash = profession.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
+                    const selectedColors = colorSets[professionHash % colorSets.length];
+
+                    const chartConfig = {
+                        type: chartType,
+                        data: {
+                            labels: technologies,
+                            datasets: [{
+                                label: 'Potencial de Impacto (%)',
+                                data: impacts,
+                                backgroundColor: selectedColors.slice(0, technologies.length),
+                                borderColor: selectedColors.slice(0, technologies.length).map(color => color.replace('0.8', '1')),
+                                borderWidth: 2,
+                                borderRadius: chartType === 'bar' ? 6 : 0,
+                                borderSkipped: false,
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { 
+                                    display: chartType === 'doughnut', 
+                                    position: 'bottom',
+                                    labels: { color: '#9ca3af', font: { size: 11 } }
+                                },
+                                title: { 
+                                    display: true, 
+                                    text: `Soluções DeiviTech para ${profession}`, 
+                                    color: '#e5e7eb',
+                                    font: { size: 14, weight: 'bold' }
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        afterLabel: function(context) {
+                                            return descriptions[context.dataIndex] || '';
+                                        }
+                                    }
+                                }
+                            },
+                            animation: {
+                                duration: 1800,
+                                easing: chartType === 'doughnut' ? 'easeOutBounce' : 'easeOutQuart'
+                            }
+                        }
+                    };
+
+                    // Configurações específicas para gráfico de barras
+                    if (chartType === 'bar') {
+                        chartConfig.options.indexAxis = isHorizontal ? 'y' : 'x';
+                        chartConfig.options.scales = {
+                            x: {
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: { 
+                                    color: '#9ca3af',
+                                    callback: function(value) { return value + '%'; }
+                                },
+                                grid: { color: 'rgba(156,163,175,0.2)' },
+                                title: { 
+                                    display: true, 
+                                    text: isHorizontal ? 'Potencial de Impacto (%)' : 'Tecnologias', 
+                                    color: '#9ca3af' 
+                                }
+                            },
+                            y: {
+                                ticks: { color: '#9ca3af' },
+                                grid: { color: 'rgba(156,163,175,0.2)' },
+                                title: { 
+                                    display: isHorizontal, 
+                                    text: 'Soluções Tecnológicas', 
+                                    color: '#9ca3af' 
+                                }
+                            }
+                        };
+                        
+                        if (isHorizontal) {
+                            [chartConfig.options.scales.x, chartConfig.options.scales.y] = [chartConfig.options.scales.y, chartConfig.options.scales.x];
+                        }
+                    }
+
+                    professionChartInstance = new Chart(professionCtx, chartConfig);
+                }
+
+                // Exibe a análise textual melhorada
+                const formattedAnalysis = analysisTextContent
+                    .replace(/\n\n/g, '</p><p class="text-gray-300 mt-4">')
+                    .replace(/\n/g, '</p><p class="text-gray-300 mt-2">');
+                    
+                analysisText.innerHTML = `
+                    <div class="bg-gradient-to-r from-gray-700/50 to-gray-600/50 p-4 rounded-lg mb-4">
+                        <h5 class="text-cyan-400 font-bold mb-2">🚀 Como a DeiviTech Pode Revolucionar sua Carreira em ${profession}</h5>
+                        <p class="text-gray-300">${formattedAnalysis}</p>
+                    </div>
+                    <div class="text-sm text-gray-400 mt-4">
+                        <p><strong>💡 Próximos Passos:</strong> Entre em contato para uma consultoria gratuita e descubra como implementar essas soluções na sua carreira!</p>
+                    </div>
+                `;
+                analysisContent.classList.remove('hidden');
+            }
+
+            // Gráfico de Crescimento na Carreira (mantido)
+            const ctxCareer = document.getElementById('careerGrowthChart')?.getContext('2d');
+            if (ctxCareer) {
+                new Chart(ctxCareer, {
+                    type: 'line',
+                    data: {
+                        labels: ['Sem Presença Digital', 'Portfólio Básico', 'Website Profissional', 'Soluções com I.A.', 'Marca Pessoal Forte'],
+                        datasets: [{
+                            label: 'Potencial de Oportunidades/Renda',
+                            data: [15, 35, 60, 80, 95], // Valores de exemplo
+                            borderColor: '#22d3ee',
+                            backgroundColor: 'rgba(34, 211, 238, 0.1)',
+                            fill: true,
+                            tension: 0.3
+                        }]
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        plugins: { legend: { display: false }, title: { display: true, text: 'Evolução do Potencial com Presença Digital', color: '#9ca3af', font: { size: 16 } } },
+                        scales: { y: { ticks: { color: '#9ca3af' }, beginAtZero: true, max: 100, title: { display: true, text: 'Índice de Potencial (%)', color: '#9ca3af'} }, x: { ticks: { color: '#9ca3af' } } }
+                    }
+                });
+            }
+        }
+
+        // --- 3. GRÁFICOS DE RESULTADOS (ATUALIZADO) ---
+        function initResultsCharts() {
+            const commonOptions = {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#9ca3af'} } },
+                scales: { 
+                    y: { ticks: { color: '#9ca3af', beginAtZero: true }, grid: { color: 'rgba(156, 163, 175, 0.1)'} }, 
+                    x: { ticks: { color: '#9ca3af' }, grid: { color: 'rgba(156, 163, 175, 0.1)'} } 
+                }
+            };
+
+            const marketCtx = document.getElementById('marketReachChart')?.getContext('2d');
+            if (marketCtx) {
+                new Chart(marketCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Sem Presença Digital', 'Com Presença Digital'],
+                        datasets: [
+                            { label: 'Alcance Local', data: [100, 300], backgroundColor: 'rgba(239, 68, 68, 0.6)', borderColor: 'rgba(239, 68, 68, 1)', borderWidth: 1 },
+                            { label: 'Alcance Nacional/Global', data: [0, 1500], backgroundColor: 'rgba(6, 182, 212, 0.6)', borderColor: 'rgba(6, 182, 212, 1)', borderWidth: 1 }
+                        ]
+                    },
+                    options: {...commonOptions, plugins: {...commonOptions.plugins, title: {display: true, text: 'Impacto no Alcance de Mercado', color: '#e5e7eb'}}}
+                });
+            }
+
+            const efficiencyCtx = document.getElementById('operationalEfficiencyChart')?.getContext('2d');
+            if (efficiencyCtx) {
+                 new Chart(efficiencyCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Tempo Gasto (Manual)', 'Tempo Gasto (Com Automação/IA)'],
+                        datasets: [{
+                            data: [80, 20], // Ex: 80% do tempo em tarefas manuais vs 20% com automação
+                            backgroundColor: ['rgba(239, 68, 68, 0.7)', 'rgba(6, 182, 212, 0.7)'],
+                            borderColor: ['#1f2937', '#1f2937'],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {...commonOptions, plugins: {...commonOptions.plugins, title: {display: true, text: 'Redução de Tempo em Tarefas', color: '#e5e7eb'}}}
+                });
+            }
+            
+            const engagementCtx = document.getElementById('engagementConversionChart')?.getContext('2d');
+            if (engagementCtx) {
+                new Chart(engagementCtx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['Interação', 'Retenção', 'Leads Qualificados', 'Conversão Final', 'Satisfação'],
+                        datasets: [
+                            { label: 'Sem Soluções Digitais Interativas', data: [3, 2, 2, 1, 4], borderColor: 'rgba(239, 68, 68, 0.8)', backgroundColor: 'rgba(239, 68, 68, 0.3)'},
+                            { label: 'Com Apps/IA Personalizados', data: [8, 7, 7, 6, 9], borderColor: 'rgba(6, 182, 212, 0.8)', backgroundColor: 'rgba(6, 182, 212, 0.3)'}
+                        ]
+                    },
+                    options: {...commonOptions, plugins: {...commonOptions.plugins, title: {display: true, text: 'Melhoria no Funil de Engajamento', color: '#e5e7eb'}}, scales: {r: {angleLines: {color: 'rgba(156,163,175,0.2)'}, grid: {color: 'rgba(156,163,175,0.2)'}, pointLabels: {color: '#9ca3af'}, suggestedMin: 0, suggestedMax:10}}}
+                });
+            }
+        }
+
+        // --- 4. SIMULADOR DE CENÁRIOS (ATUALIZADO) ---
+        function initScenarioSimulator() {
+            const scenarios = [
+                { id: 1, title: "Profissional Buscando Recolocação", solution: "Website Portfólio + Otimização de LinkedIn com I.A.", tech: "HTML/CSS/JS, I.A. para análise de Vagas, SEO Pessoal", impactLabel: "Visibilidade para Recrutadores", impactBefore: 20, impactAfter: 85, explanation: "Um portfólio online e LinkedIn otimizado aumentam drasticamente a chance de ser encontrado e contatado por recrutadores, destacando suas habilidades de forma profissional." },
+                { id: 2, title: "Pequeno Negócio com Vendas Lentas", solution: "Loja Virtual Simples + Campanhas de Anúncio com I.A.", tech: "Plataforma E-commerce, I.A. para Segmentação de Público", impactLabel: "Potencial de Vendas Online", impactBefore: 10, impactAfter: 70, explanation: "Uma loja online expande o mercado para além do local físico, e a I.A. ajuda a direcionar anúncios para o público certo, otimizando o investimento." },
+                { id: 3, title: "Processos Internos Manuais e Demorados", solution: "Automação de Tarefas com Scripts e I.A.", tech: "Python/PowerShell, APIs de I.A. para Processamento de Dados", impactLabel: "Eficiência Operacional", impactBefore: 30, impactAfter: 90, explanation: "Automatizar tarefas repetitivas libera tempo da equipe para atividades estratégicas, reduz erros e aumenta a produtividade geral." },
+                { id: 4, title: "Dificuldade em Gerar Leads Qualificados", solution: "Landing Page Otimizada + Chatbot com I.A.", tech: "Construtor de Landing Page, Plataforma de Chatbot com I.A.", impactLabel: "Geração de Leads Qualificados", impactBefore: 15, impactAfter: 75, explanation: "Uma landing page focada em conversão, combinada com um chatbot inteligente, qualifica visitantes e captura informações de contato 24/7." }
+            ];
+            let scenarioChartInstance;
+            const scenarioCtx = document.getElementById('scenarioImpactChart')?.getContext('2d');
+            if (!scenarioCtx) return; 
+
+            const scenarioSelectorEl = document.getElementById('scenario-selector');
+            const scenarioTitleEl = document.getElementById('scenario-title');
+            const scenarioSolutionTechEl = document.getElementById('scenario-solution-tech');
+            const scenarioExplanationEl = document.getElementById('scenario-explanation');
+
+            function updateScenarioDemo(scenario) {
+                scenarioTitleEl.textContent = scenario.title;
+                scenarioSolutionTechEl.textContent = scenario.solution;
+                scenarioExplanationEl.textContent = scenario.explanation;
+
+                scenarioSelectorEl.querySelectorAll('button').forEach(btn => { 
+                    btn.className = parseInt(btn.dataset.scenarioId) === scenario.id 
+                        ? 'w-full p-4 rounded-lg text-left transition-all duration-300 border-2 bg-cyan-500/20 border-cyan-500 text-white' 
+                        : 'w-full p-4 rounded-lg text-left transition-all duration-300 border-2 bg-gray-900 border-gray-700 hover:bg-gray-700/50 text-gray-300'; 
+                });
+
+                if (scenarioChartInstance) scenarioChartInstance.destroy();
+                scenarioChartInstance = new Chart(scenarioCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Antes da Solução', 'Após Solução DeiviTech'],
+                        datasets: [{
+                            label: scenario.impactLabel,
+                            data: [scenario.impactBefore, scenario.impactAfter],
+                            backgroundColor: ['rgba(239, 68, 68, 0.6)', 'rgba(6, 182, 212, 0.6)'],
+                            borderColor: ['rgba(239, 68, 68, 1)', 'rgba(6, 182, 212, 1)'],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        plugins: { legend: { display: false }, title: { display: true, text: `Impacto Estimado: ${scenario.impactLabel} (%)`, color: '#9ca3af' } },
+                        scales: { x: { ticks: { color: '#9ca3af' } }, y: { ticks: { color: '#9ca3af' }, beginAtZero: true, max: 100 } }
+                    }
+                });
+            }
+
+            scenarios.forEach(scenario => {
+                const button = document.createElement('button');
+                button.dataset.scenarioId = scenario.id;
+                button.className = 'w-full p-4 rounded-lg text-left transition-all duration-300 border-2 bg-gray-900 border-gray-700 hover:bg-gray-700/50 text-gray-300';
+                button.innerHTML = `<h4 class="font-bold text-lg">${scenario.title}</h4>`;
+                button.onclick = () => updateScenarioDemo(scenario);
+                scenarioSelectorEl.appendChild(button);
+            });
+            if (scenarios.length > 0) updateScenarioDemo(scenarios[0]);
+        }
+          // --- 5. FUNCIONALIDADE COM GEMINI API (ATUALIZADO) ---
+        function initGeminiFeature() {
+            const expandBtn = document.getElementById('expand-idea-btn');
+            const modal = document.getElementById('ai-response-modal');
+            const closeModalBtn = document.getElementById('close-ai-modal');
+            const regenerateBtn = document.getElementById('regenerate-idea-btn');
+            const generate5IdeasBtn = document.getElementById('generate-5-creative-ideas-btn');
+            const sendAiIdeaBtn = document.getElementById('send-ai-idea-btn');            expandBtn.addEventListener('click', () => {
+                targetTopicCount = 3;
+                fetchAndDisplayAiResponse(false);
+            });
+            regenerateBtn.addEventListener('click', () => {
+                targetTopicCount = 3;
+                fetchAndDisplayAiResponse(true);
+            });
+            generate5IdeasBtn.addEventListener('click', () => {
+                targetTopicCount = 5;
+                fetchAndDisplayAiResponse(true);
+            });
+            closeModalBtn.addEventListener('click', () => modal.classList.add('hidden'));
+            
+            sendAiIdeaBtn.addEventListener('click', () => {
+                // Validação movida para prepareAiMessageAndShowSendOptions
+                prepareAiMessageAndShowSendOptions(); 
+                // Não fechar o modal da I.A. aqui, fechar após seleção de envio (WhatsApp/Email)
+                // ou se o usuário cancelar a seleção de envio.
+            });              async function fetchAndDisplayAiResponse(isRegenerate = false) {
+                const userInput = document.getElementById('message-input').value;
+                const modal = document.getElementById('ai-response-modal'); // Busca o modal aqui
+                const modalContentEl = document.getElementById('ai-response-content');
+                const loaderEl = document.getElementById('ai-loader');
+                const progressBar = document.getElementById('ai-progress-bar');
+                const progressPercent = document.getElementById('ai-progress-percent');
+                const progressText = document.getElementById('ai-progress-text');if (!isRegenerate && !userInput.trim()) {
+                    alert('Por favor, descreva sua ideia primeiro na caixa de mensagem.');
+                    return;
+                }
+
+                console.log('Validação passou, abrindo modal...'); // Debug                // Função para simular progresso realista e dinâmico
+                let progressInterval;
+                function updateProgress(targetPercent, text, duration = 1000) {
+                    if (!progressBar) {
+                        console.error('Elemento progressBar não encontrado!');
+                        return;
+                    }
+                    
+                    const currentPercent = parseInt(progressBar.style.width) || 0;
+                    const increment = (targetPercent - currentPercent) / (duration / 50);
+                    let current = currentPercent;
+                    
+                    clearInterval(progressInterval);
+                    progressInterval = setInterval(() => {
+                        current += increment;
+                        if ((increment > 0 && current >= targetPercent) || 
+                            (increment < 0 && current <= targetPercent)) {
+                            current = targetPercent;
+                            clearInterval(progressInterval);
+                        }
+                        
+                        if (progressBar) progressBar.style.width = Math.round(current) + '%';
+                        if (progressPercent) progressPercent.textContent = Math.round(current) + '%';
+                        if (progressText) progressText.textContent = text;
+                    }, 50);
+                }                // Função para progresso automático baseado no tempo estimado da API
+                function startRealisticProgress() {
+                    // Garante que o progresso inicia corretamente
+                    if (progressBar) progressBar.style.width = '0%';
+                    if (progressPercent) progressPercent.textContent = '0%';
+                    if (progressText) progressText.textContent = 'Preparando análise...';
+                    
+                    updateProgress(10, 'Iniciando análise...', 200);
+                    
+                    setTimeout(() => updateProgress(25, 'Conectando com I.A. DeiviTech...', 500), 300);
+                    setTimeout(() => updateProgress(45, 'Enviando sua ideia para análise...', 800), 1000);
+                    setTimeout(() => updateProgress(65, 'I.A. analisando possibilidades...', 1000), 2500);
+                    setTimeout(() => updateProgress(80, 'Gerando ideias personalizadas...', 800), 4000);
+                    
+                    // O progresso final (90-100%) será controlado quando a resposta chegar
+                }
+
+                let topicsToKeep = [];
+                let numberOfTopicsToRegenerate = targetTopicCount;
+                let existingTitles = [];
+
+                if (isRegenerate) {
+                    const allCurrentTopicElements = Array.from(modalContentEl.querySelectorAll('.ai-topic-item'));
+                    allCurrentTopicElements.forEach(topicEl => {
+                        const checkbox = topicEl.querySelector('input[type="checkbox"]');
+                        if (checkbox && checkbox.checked) {
+                            topicsToKeep.push({
+                                id: checkbox.id,
+                                title: checkbox.value,
+                                description: checkbox.dataset.description,
+                                checked: true
+                            });
+                            existingTitles.push(checkbox.value);
+                        }
+                    });
+                    numberOfTopicsToRegenerate = Math.max(0, targetTopicCount - topicsToKeep.length);
+
+                    if (numberOfTopicsToRegenerate <= 0) {
+                        alert(`Todos os ${targetTopicCount} tópicos já estão selecionados. Se desejar novas ideias, desmarque alguns tópicos antes de regerar.`);
+                        return;
+                    }
+                }
+                 if (!userInput.trim() && topicsToKeep.length === 0 && isRegenerate) {
+                    alert('Não há ideia base para regerar. Por favor, descreva sua ideia ou gere uma primeira vez.');
+                    return;
+                }                modal.classList.remove('hidden');
+                loaderEl.classList.remove('hidden');
+                sendAiIdeaBtn.classList.add('hidden');
+                
+                // Inicia progresso realista - remove a inicialização em 0%
+                
+                if (!isRegenerate) { // Limpa tudo apenas se não for regeração
+                    modalContentEl.innerHTML = '';
+                    lastAiResponseRaw = "";
+                } else { // Se for regerar, remove apenas os não selecionados (visualmente, serão recriados depois)
+                    const allCurrentTopicElements = Array.from(modalContentEl.querySelectorAll('.ai-topic-item'));
+                    allCurrentTopicElements.forEach(topicEl => {
+                        const checkbox = topicEl.querySelector('input[type="checkbox"]');
+                        if (checkbox && !checkbox.checked) {
+                            // Não remove do DOM aqui, pois displayAiResponseInModal vai limpar e recriar tudo
+                            // Apenas garantimos que topicsToKeep tem os corretos
+                        }
+                    });
+                }                let basePromptSegment = `Baseado na ideia: "${userInput || 'um projeto inovador'}".\n`;
+                if (!userInput && existingTitles.length > 0 && isRegenerate) {
+                    basePromptSegment = `Considerando os seguintes tópicos já existentes: "${existingTitles.join('", "')}".\n`;
+                }
+
+                let promptText = `Você é DeiviTech, um consultor de inovação. ${basePromptSegment}`;
+                if (isRegenerate && existingTitles.length > 0) {
+                    promptText += `Os seguintes títulos já foram considerados: ${existingTitles.join(', ')}. Por favor, NÃO repita estes títulos ou ideias muito similares.\n`;
+                }
+                promptText += `Gere EXATAMENTE ${numberOfTopicsToRegenerate} NOVOS, ÚNICOS e DISTINTOS tópicos de solução ou próximos passos (ex: Portfólio Online, App Mobile, Automação de Processos, Website Institucional, Consultoria de IA).\n`;
+                promptText += `Seja criativo e ofereça perspectivas diferentes das já listadas, se houver.\n`;
+                promptText += `Formato para cada tópico:\n**Título Curto e Direto:** Descrição detalhada (2-3 frases) explicando o tópico, benefícios e aplicação.\nNão use introduções/conclusões longas.`;                  // console.log("Prompt para I.A.:", promptText); // Para debug                console.log("Enviando para API Gemini. Tópicos solicitados:", numberOfTopicsToRegenerate);
+                startRealisticProgress(); // Inicia progresso automático
+
+                try {
+                    const payload = { contents: [{ role: "user", parts: [{ text: promptText }] }] };
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
+
+                    console.log("Fazendo requisição para:", apiUrl.split('?')[0]); // Log sem a chave
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        const errorBody = await response.json().catch(() => ({ error: { message: response.statusText } }));
+                        throw new Error(`Erro na API Gemini: ${errorBody?.error?.message || response.statusText}.`);
+                    }                    updateProgress(90, 'Processando resposta da I.A....', 300);
+                    const result = await response.json();
+                    console.log("Resposta da API recebida:", result);
+
+                    if (result.candidates && result.candidates[0]?.content?.parts?.[0]?.text) {
+                        updateProgress(95, 'Formatando ideias...', 200);
+                        const newAiText = result.candidates[0].content.parts[0].text;
+                        console.log("Texto da I.A. extraído:", newAiText.substring(0, 200) + "...");
+                        if (isRegenerate) {
+                            lastAiResponseRaw += "\n" + newAiText; // Concatena para manter um histórico, se necessário
+                        } else {
+                            lastAiResponseRaw = newAiText;
+                        }
+                        updateProgress(100, 'Concluído! ✨', 300);
+                        setTimeout(() => {
+                            displayAiResponseInModal(newAiText, modalContentEl, topicsToKeep, isRegenerate, targetTopicCount);
+                            sendAiIdeaBtn.classList.remove('hidden');
+                            clearInterval(progressInterval); // Para o progresso automático
+                        }, 800);
+                    } else {
+                        throw new Error("A resposta da I.A. foi inválida ou vazia. Tente reformular sua ideia ou regerar.");
+                    }
+
+                } catch (error) {
+                    console.error("Erro ao chamar a API Gemini:", error);
+                    const errorP = document.createElement('p');
+                    errorP.className = 'text-red-400';
+                    errorP.innerHTML = `Desculpe, ocorreu um erro ao processar sua ideia. Tente novamente. <br><br><span class="text-sm text-gray-400">Detalhe: ${error.message}</span>`;
+                    if (isRegenerate) modalContentEl.appendChild(errorP); else modalContentEl.innerHTML = errorP.outerHTML;
+                } finally {
+                    loaderEl.classList.add('hidden');
+                }
+            }
+
+            function displayAiResponseInModal(rawText, containerElement, preservedTopics = [], isRegen = false, targetCount = 3) {
+                // Limpa o container ANTES de adicionar/recriar os tópicos.
+                // Isso é importante para regeração, para que os tópicos mantidos sejam recriados na ordem correta com os novos.
+                containerElement.innerHTML = '';
+                
+                const topicRegex = /\*\*([^*]+)\*\*\s*:\s*([^\*\*]+(?:\n(?!\*\*)[^\*\*]+)*)|^\*\s*([^:]+):\s*([^*]+(?:\n(?!\*)[^*]+)*)|([^:]+):\s*([^*]+(?:\n(?!\*\*)[^*]+)*)/gm;
+                let match;
+                const newTopicsFound = [];
+
+                while ((match = topicRegex.exec(rawText)) !== null) {
+                    let title, description;
+                    if (match[1] && match[2]) { title = match[1].trim(); description = match[2].trim(); }
+                    else if (match[3] && match[4]) { title = match[3].trim(); description = match[4].trim(); }
+                    else if (match[5] && match[6]) { title = match[5].trim(); description = match[6].trim(); }
+                    
+                    // Evitar adicionar tópicos duplicados que possam vir da I.A. apesar do prompt
+                    if (title && description && !preservedTopics.some(pt => pt.title === title) && !newTopicsFound.some(nt => nt.title === title) ) {
+                        newTopicsFound.push({ title, description, checked: true }); // Novos tópicos vêm checados
+                    }
+                }                // Fallback para parsing se regex falhar (APENAS para o rawText dos NOVOS tópicos)
+                if (newTopicsFound.length === 0 && rawText.trim().length > 0) {
+                    const lines = rawText.split('\n').filter(line => line.trim() !== '');
+                    let currentTitle = null;
+                    let currentDesc = [];
+                    for (const line of lines) {
+                        if (line.includes(':') && !currentTitle) {
+                            const parts = line.split(/:(.*)/s);
+                            currentTitle = parts[0].replace(/\*\*/g, '').trim();
+                            if (parts[1]) currentDesc.push(parts[1].trim());
+                        } else if (currentTitle) {
+                            currentDesc.push(line.trim());
+                        } else if (lines.length <= 10 && !line.includes(':')) { // Linha simples como tópico
+                             if (currentTitle && !preservedTopics.some(pt => pt.title === currentTitle) && !newTopicsFound.some(nt => nt.title === currentTitle)) {
+                                newTopicsFound.push({ title: `Sugestão ${preservedTopics.length + newTopicsFound.length + 1}`, description: line.trim(), checked: true });
+                             }
+                        }
+                        // Se um novo título é detectado ou é o fim das linhas
+                        if (currentTitle && (line.trim() === '' || line.startsWith('**') || lines.indexOf(line) === lines.length -1) && currentDesc.length > 0) {
+                            const descText = currentDesc.join('\n');
+                            if (!preservedTopics.some(pt => pt.title === currentTitle) && !newTopicsFound.some(nt => nt.title === currentTitle)) {
+                                newTopicsFound.push({ title: currentTitle, description: descText, checked: true });
+                            }
+                            currentTitle = null;
+                            currentDesc = [];
+                            if (line.includes(':') && (line.startsWith('**') || !line.includes(' '))) { // Novo tópico na mesma linha
+                                const parts = line.split(/:(.*)/s);
+                                currentTitle = parts[0].replace(/\*\*/g, '').trim();
+                                if (parts[1]) currentDesc.push(parts[1].trim());
+                            }
+                        }
+                    }
+                    if (currentTitle && currentDesc.length > 0) { // Adiciona o último tópico pendente
+                        const descText = currentDesc.join('\n');
+                        if (!preservedTopics.some(pt => pt.title === currentTitle) && !newTopicsFound.some(nt => nt.title === currentTitle)) {
+                           newTopicsFound.push({ title: currentTitle, description: descText, checked: true });
+                        }
+                    }
+                }                let allTopics = [];
+                if (isRegen) {
+                    // Combina os tópicos preservados com os novos encontrados, garantindo não exceder targetCount no total
+                    // e priorizando os preservados.
+                    const combined = [...preservedTopics];
+                    const needed = targetCount - combined.length;
+                    if (needed > 0) {
+                        newTopicsFound.slice(0, needed).forEach(nt => {
+                            // Adiciona apenas se não for uma duplicata exata de um já preservado
+                            if (!combined.some(ct => ct.title === nt.title)) {
+                                combined.push(nt);
+                            }
+                        });
+                    }
+                    allTopics = combined.slice(0, targetCount); // Garante no máximo targetCount
+                } else {
+                    allTopics = newTopicsFound.slice(0, targetCount); // Para primeira geração, pega até targetCount dos novos
+                }
+                  if (allTopics.length === 0) { // Se, mesmo após tudo, não há tópicos
+                     containerElement.innerHTML = `<p class="text-yellow-400">A I.A. gerou uma resposta, mas não consegui formatá-la em tópicos claros ou não foram gerados novos tópicos.</p>
+                     <p class="text-gray-400 text-sm mt-2">Tente reformular sua ideia ou usar termos mais específicos.</p>
+                     <div class="mt-4 p-3 bg-gray-700 rounded text-sm">
+                        <p class="text-gray-300 mb-2">Resposta original da IA:</p>
+                        <pre class="whitespace-pre-wrap text-xs text-gray-400">${rawText.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+                     </div>`;
+                    return;
+                }
+                
+                const topicsToDisplay = allTopics; // Não precisa mais do slice(0,5) aqui, já foi feito
+
+                topicsToDisplay.forEach((topic, index) => {
+                    const topicId = topic.id || `ai-topic-${Date.now()}-${index}`; // Garante ID único
+
+                    const topicItemDiv = document.createElement('div');
+                    topicItemDiv.className = 'ai-topic-item modal-checkbox-label'; // Adiciona classe para item de tópico
+
+                    const headerDiv = document.createElement('div');
+                    headerDiv.className = 'flex items-center cursor-pointer';
+                    headerDiv.onclick = () => {
+                        const details = topicItemDiv.querySelector('.ai-topic-details');
+                        const arrow = topicItemDiv.querySelector('.ai-topic-arrow');
+                        details.classList.toggle('hidden');
+                        arrow.classList.toggle('rotate-90');
+                    };
+
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.id = topicId;
+                    checkbox.value = topic.title; 
+                    checkbox.checked = topic.checked === undefined ? true : topic.checked; 
+                    checkbox.dataset.description = topic.description;
+                    checkbox.className = 'mr-3 flex-shrink-0';
+                    checkbox.onclick = (e) => e.stopPropagation(); // Evita que o clique no checkbox acione o accordion
+
+                    const titleEl = document.createElement('strong');
+                    titleEl.textContent = `${index + 1}. ${topic.title}`; // Numeração corrigida
+                    titleEl.className = 'flex-grow';
+
+                    const arrowSpan = document.createElement('span');
+                    arrowSpan.className = 'ai-topic-arrow fas fa-chevron-right ml-2 transition-transform duration-200';
+                    
+                    headerDiv.appendChild(checkbox);
+                    headerDiv.appendChild(titleEl);
+                    headerDiv.appendChild(arrowSpan);
+
+                    const detailsDiv = document.createElement('div');
+                    detailsDiv.className = 'ai-topic-details hidden pl-8 pt-2 text-sm'; // Detalhes ocultos e com padding
+                    
+
+                    const descriptionP = document.createElement('p');
+                    descriptionP.style.whiteSpace = 'pre-wrap';
+                    descriptionP.textContent = topic.description;
+                    detailsDiv.appendChild(descriptionP);
+                    
+                    topicItemDiv.appendChild(headerDiv);
+                    topicItemDiv.appendChild(detailsDiv);
+                    containerElement.appendChild(topicItemDiv);
+                });                if (topicsToDisplay.length < targetCount) {
+                    const warning = document.createElement('p');
+                    warning.className = 'text-yellow-400 text-sm mt-2';
+                    let warningText = `A I.A. gerou ${topicsToDisplay.length} tópicos de ${targetCount} solicitados.`;
+                    if (targetCount === 5) {
+                        warningText += ` O ideal são 5 tópicos para análise completa.`;
+                    }
+                    warningText += ` Você pode tentar regerar para obter mais opções ou ajustar sua ideia inicial.`;
+                    warning.textContent = warningText;
+                    containerElement.appendChild(warning);
+                }
+            }
+        }
+
+        function getSelectedAiTopics() {
+            const topics = [];
+            const topicElements = document.querySelectorAll('#ai-response-content .ai-topic-item');
+            topicElements.forEach(item => {
+                const checkbox = item.querySelector('input[type="checkbox"]');
+                if (checkbox && checkbox.checked) {
+                    topics.push({
+                        title: checkbox.value,
+                        description: checkbox.dataset.description
+                    });
+                }
+            });
+            return topics;
+        }
+          function prepareAiMessageAndShowSendOptions() {
+            const selectedTopics = getSelectedAiTopics();
+            const userOriginalIdea = document.getElementById('message-input').value.trim();
+
+            if (selectedTopics.length === 0 && (typeof lastAiResponseRaw === 'undefined' || !lastAiResponseRaw)) { 
+                alert("Por favor, selecione pelo menos um tópico da ideia gerada pela I.A. para enviar.");
+                return;
+            }
+            // Se lastAiResponseRaw está vazio, é um envio manual, que é tratado por send-manual-idea-btn
+            // Esta função é primariamente para o fluxo da I.A.
+
+            document.getElementById('send-options-modal').classList.remove('hidden');
+            // O modal da I.A. permanece aberto até que o usuário escolha uma opção de envio ou cancele.
+        }
+
+
+        // --- 6. FORMULÁRIO DE CONTATO E OPÇÕES DE ENVIO (ATUALIZADO) ---
+        function initContactFormAndSendOptions() {
+            const contactForm = document.getElementById('contact-form'); // Não usado para submit direto mais
+            const sendManualIdeaBtn = document.getElementById('send-manual-idea-btn');
+            
+            const sendOptionsModal = document.getElementById('send-options-modal');
+            const closeSendOptionsModalBtn = document.getElementById('close-send-options-modal');
+            const sendViaWhatsappBtn = document.getElementById('send-via-whatsapp-btn');
+            const sendViaEmailBtn = document.getElementById('send-via-email-btn');
+            const aiModal = document.getElementById('ai-response-modal');
+
+
+            sendManualIdeaBtn.addEventListener('click', () => {
+                const userIdea = document.getElementById('message-input').value.trim();
+                const userName = document.getElementById('contact-name').value.trim() || "Visitante";
+                const userPhone = document.getElementById('contact-phone').value.trim();
+
+                if (!userIdea) {
+                    alert("Por favor, descreva sua ideia ou motivo do contato.");
+                    document.getElementById('message-input').focus();
+                    return;
+                }
+                if (!userPhone) { 
+                    alert("Por favor, informe seu número de WhatsApp/Telegram para contato.");
+                    document.getElementById('contact-phone').focus();
+                    return;
+                }
+                
+                currentMessageToSend = `Nome: ${userName}\nContato: ${userPhone}\n\nIdeia/Mensagem:\n${userIdea}`;
+                lastAiResponseRaw = ""; // Garante que não estamos enviando uma ideia de IA
+                sendOptionsModal.classList.remove('hidden');
+                aiModal.classList.add('hidden'); // Esconde modal da I.A. se estiver aberto
+            });
+            
+            closeSendOptionsModalBtn.addEventListener('click', () => {
+                sendOptionsModal.classList.add('hidden');
+                // Não reabre o modal da I.A. automaticamente, o usuário pode ter fechado intencionalmente.
+            });
+
+            sendViaWhatsappBtn.addEventListener('click', () => {                if (validateContactInfoForSend()) {
+                    sendViaWhatsApp();
+                    sendOptionsModal.classList.add('hidden');
+                    aiModal.classList.add('hidden'); // Fecha modal da I.A. após envio
+                    clearContactState(); // Limpa estado após tentativa de envio
+                }
+            });
+            sendViaEmailBtn.addEventListener('click', () => {                 if (validateContactInfoForSend(true)) { // true para checar email
+                    sendViaEmail();
+                    sendOptionsModal.classList.add('hidden');
+                    aiModal.classList.add('hidden'); // Fecha modal da I.A. após envio
+                    clearContactState(); // Limpa estado após tentativa de envio
+                }
+            });
+        }
+
+        function validateContactInfoForSend(isEmail = false) {
+            const userPhone = document.getElementById('contact-phone').value.trim();
+            if (!userPhone) {
+                alert("Por favor, informe seu número de WhatsApp/Telegram para contato.");
+                document.getElementById('contact-phone').focus();
+                return false;
+            }
+            if (isEmail) {
+                const userEmail = document.getElementById('contact-email').value.trim();
+                if (!userEmail) {
+                    alert("Por favor, informe seu e-mail para envio.");
+                    document.getElementById('contact-email').focus();
+                    return false;
+                }
+            }
+            // Validação da ideia/mensagem principal
+            const userIdea = document.getElementById('message-input').value.trim();
+            const selectedAiTopics = getSelectedAiTopics();
+            if (!userIdea && selectedAiTopics.length === 0 && !currentMessageToSend) {
+                 alert("Não há mensagem ou ideia da I.A. selecionada para enviar. Por favor, descreva sua ideia ou gere/selecione tópicos da I.A.");
+                 return false;
+            }
+            return true;
+        }
+
+        function getGreeting() {
+            const hour = new Date().getHours();
+            if (hour < 5) return "Boa madrugada";
+            if (hour < 12) return "Bom dia";
+            if (hour < 18) return "Boa tarde";
+            return "Boa noite";
+        }        function sendViaWhatsApp() {
+            // Validação já deve ter ocorrido em validateContactInfoForSend()
+            const greeting = getGreeting();
+            const userName = document.getElementById('contact-name').value.trim() || "Visitante";
+            const userOriginalIdea = document.getElementById('message-input').value.trim();            let messageBody = "";
+            const selectedAiTopics = getSelectedAiTopics();
+            const MAX_WHATSAPP_LENGTH = 1600; // Aumentado para permitir mais conteúdo
+
+            if (lastAiResponseRaw && selectedAiTopics.length > 0) {
+                messageBody = `usei a I.A. DeiviTech para expandir minha ideia e achei interessante! Seguem os pontos que selecionei:\n`;
+                let topicsText = "";
+                
+                // Calcula espaço disponível para tópicos
+                const headerLength = messageBody.length;
+                const footerEstimate = 100; // Espaço estimado para rodapé e ideia original
+                const availableForTopics = MAX_WHATSAPP_LENGTH - headerLength - footerEstimate;
+                
+                // Distribui espaço entre tópicos de forma inteligente
+                const maxDescPerTopic = Math.max(120, Math.floor(availableForTopics / selectedAiTopics.length) - 50);
+                
+                selectedAiTopics.forEach((topic, index) => {
+                    let descSummary = topic.description.trim();
+                    
+                    // Lógica melhorada para descrições mais úteis
+                    if (descSummary.length > maxDescPerTopic) { 
+                        // Tenta cortar em uma frase completa primeiro
+                        const sentences = descSummary.split('. ');
+                        let truncated = '';
+                        
+                        for (let i = 0; i < sentences.length; i++) {
+                            const nextSentence = sentences[i] + (i < sentences.length - 1 ? '. ' : '');
+                            if ((truncated + nextSentence).length <= maxDescPerTopic - 3) {
+                                truncated += nextSentence;
+                            } else {
+                                break;
+                            }
+                        }
+                        
+                        // Se conseguiu pelo menos uma frase completa, usa ela
+                        if (truncated.length > 50) {
+                            descSummary = truncated;
+                            if (!descSummary.endsWith('.')) {
+                                descSummary += '.';
+                            }
+                        } else {
+                            // Senão, corta no meio mas procura por espaço ou pontuação
+                            const cutPoint = maxDescPerTopic - 3;
+                            let bestCut = cutPoint;
+                            
+                            // Procura por espaço, vírgula ou ponto próximo ao corte
+                            for (let i = cutPoint; i > cutPoint - 20 && i > 0; i--) {
+                                if (descSummary[i] === ' ' || descSummary[i] === ',' || descSummary[i] === '.') {
+                                    bestCut = i;
+                                    break;
+                                }
+                            }
+                            
+                            descSummary = descSummary.substring(0, bestCut) + '...';
+                        }
+                    }
+                    
+                    topicsText += `\n\n${index + 1}. *${topic.title.trim()}*:\n${descSummary}`;
+                });
+                
+                messageBody += topicsText;
+                
+                // Só adiciona ideia original se houver espaço suficiente
+                const currentLength = messageBody.length;
+                if (userOriginalIdea && currentLength < MAX_WHATSAPP_LENGTH - 200) {
+                    const remainingSpace = MAX_WHATSAPP_LENGTH - currentLength - 100; // Reserva espaço para texto adicional
+                    const ideaToAdd = userOriginalIdea.length > remainingSpace ? 
+                        userOriginalIdea.substring(0, remainingSpace - 3) + '...' : 
+                        userOriginalIdea;
+                    messageBody += `\n\nMinha ideia original: ${ideaToAdd}`;
+                }
+            } else if (currentMessageToSend) { 
+                 messageBody = `gostaria de discutir o seguinte:\n${currentMessageToSend.replace(new RegExp("Nome: .+\\nContato: .+\\n\\nIdeia/Mensagem:\\n"), '')}`;
+            } else if (userOriginalIdea) { // Fallback para ideia manual se currentMessageToSend não estiver setado
+                messageBody = `gostaria de discutir a seguinte ideia/necessidade:\n${userOriginalIdea}`;
+            } else {
+                alert("Não há mensagem para enviar.");
+                return;
+            }
+              let finalMessage = `Olá Deivi, ${greeting}! Sou ${userName}.\n\n${messageBody}`;
+            finalMessage += `\n\nAguardo seu contato para conversarmos mais.`;
+            
+            // Truncamento inteligente se necessário (última verificação)
+            if (finalMessage.length > MAX_WHATSAPP_LENGTH) {
+                const headerLength = `Olá Deivi, ${greeting}! Sou ${userName}.\n\n`.length;
+                const footerLength = `\n\nAguardo seu contato para conversarmos mais.`.length;
+                const availableSpace = MAX_WHATSAPP_LENGTH - headerLength - footerLength - 50; // margem de segurança
+                
+                let truncatedBody = messageBody;
+                if (messageBody.length > availableSpace) {
+                    // Corta preservando tópicos completos quando possível
+                    const topicSeparator = /\n\n\d+\./g;
+                    const matches = [...messageBody.matchAll(topicSeparator)];
+                    
+                    if (matches.length > 0) {
+                        // Tenta manter pelo menos o primeiro tópico completo
+                        let safeLength = matches[0].index;
+                        for (let i = 1; i < matches.length; i++) {
+                            if (matches[i].index < availableSpace - 100) {
+                                safeLength = matches[i].index;
+                            } else {
+                                break;
+                            }
+                        }
+                        if (safeLength > 100) {
+                            truncatedBody = messageBody.substring(0, safeLength) + '\n\n[Mais detalhes via contato direto...]';
+                        } else {
+                            truncatedBody = messageBody.substring(0, availableSpace - 50) + '...\n\n[Detalhes completos via contato]';
+                        }
+                    } else {
+                        truncatedBody = messageBody.substring(0, availableSpace - 50) + '...';
+                    }
+                }
+                
+                finalMessage = `Olá Deivi, ${greeting}! Sou ${userName}.\n\n${truncatedBody}\n\nAguardo seu contato para conversarmos mais.`;
+            }
+            
+            const whatsappUrl = `https://wa.me/${MY_WHATSAPP_NUMBER}?text=${encodeURIComponent(finalMessage)}`;
+            window.open(whatsappUrl, '_blank');
+            // clearContactState(); // Movido para o listener do botão
+        }
+
+        function sendViaEmail() {
+            // Validação já deve ter ocorrido em validateContactInfoForSend(true)
+            const userName = document.getElementById('contact-name').value.trim() || "Visitante";
+            const userEmail = document.getElementById('contact-email').value.trim(); // Já validado como obrigatório
+            const userPhone = document.getElementById('contact-phone').value.trim(); // Já validado como obrigatório
+            const userOriginalIdea = document.getElementById('message-input').value.trim();
+
+            let subject = `Contato sobre Projeto/Ideia - ${userName}`;
+            let body = `Olá Deivi,\n\nEscrevo referente à minha ideia/projeto que explorei em seu site.\n\n`;
+
+            const selectedAiTopics = getSelectedAiTopics();            if (lastAiResponseRaw && selectedAiTopics.length > 0) {
+                subject = `Ideia Expandida por I.A. (DeiviTech Site) - ${userName}`;
+                body += `Usei a ferramenta de I.A. do seu site para detalhar minha ideia inicial: "${userOriginalIdea}".\n\n`;
+                body += `Gostaria de discutir os seguintes pontos que selecionei da análise da I.A.:\n\n`;
+                selectedAiTopics.forEach((topic, index) => {
+                    const cleanDescription = topic.description.trim().replace(/\*\*/g, ''); // Remove markdown
+                    body += `${index + 1}. ${topic.title.trim()}:\n${cleanDescription}\n\n`;
+                });
+                body += `Acredito que essas soluções podem realmente fazer a diferença no meu projeto. O que acha? Podemos conversar sobre esses tópicos?`;
+            } else if (currentMessageToSend) { 
+                 body += `Minha ideia/mensagem é a seguinte:\n\n${currentMessageToSend.replace(new RegExp("Nome: .+\\nContato: .+\\n\\nIdeia/Mensagem:\\n"), '')}`;
+            } else if (userOriginalIdea) { // Fallback para ideia manual
+                body += `Minha ideia/mensagem é a seguinte:\n\n${userOriginalIdea}`;
+            } else {
+                 alert("Não há mensagem para enviar.");
+                return;
+            }
+
+            body += `\n\n--\n`;
+            body += `${userName}\n`;
+            body += `Meu contato é: ${userPhone}`;
+            if (userEmail) { // userEmail já foi validado como presente
+                body += `\nMeu e-mail: ${userEmail}`;
+            }
+            body += `\n\nAguardo seu retorno.`;
+
+            const mailtoUrl = `mailto:${MY_EMAIL_ADDRESS}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoUrl;
+            // clearContactState(); // Movido para o listener do botão
+        }
+        
+        function clearContactState() {
+            currentMessageToSend = "";
+            lastAiResponseRaw = "";
+            // Opcionalmente, limpar campos do formulário
+            // document.getElementById('contact-name').value = "";
+            // document.getElementById('contact-email').value = "";
+            // document.getElementById('contact-phone').value = "";
+            // document.getElementById('message-input').value = "";
+        }
+        
+    </script>
+</body>
+</html>
