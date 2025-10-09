@@ -429,6 +429,11 @@
                 <p class="text-lg text-cyan-400 mb-12">Descreva sua visão abaixo para que a I.A. da DeiviTech crie um esboço inicial, ou envie sua mensagem diretamente.</p>
                 
                 <form id="contact-form" class="space-y-4">
+                    <div class="bg-yellow-900/30 border border-yellow-400/50 rounded-lg p-4 mb-4">
+                        <h4 class="text-yellow-400 font-bold mb-2">🔑 Chave da API Google Gemini (Obrigatória para funcionalidades de I.A.)</h4>
+                        <p class="text-gray-300 text-sm mb-2">Para usar as ferramentas de I.A., insira sua chave da API Google Gemini. Você pode obter uma em: <a href="https://makersuite.google.com/app/apikey" target="_blank" class="text-cyan-400 hover:text-cyan-300">Google AI Studio</a></p>
+                        <input type="password" id="gemini-api-key" placeholder="Cole sua chave da API aqui (ex: AIzaSy...)" class="w-full bg-gray-700 text-white p-3 rounded-lg border border-gray-600 focus:ring-2 focus:ring-cyan-500 focus:outline-none transition" />
+                    </div>
                     <input type="text" id="contact-name" name="name" placeholder="Seu Nome" class="w-full bg-gray-700 text-white p-3 rounded-lg border border-gray-600 focus:ring-2 focus:ring-cyan-500 focus:outline-none transition" />
                     <input type="email" id="contact-email" name="email" placeholder="Seu E-mail (Opcional para WhatsApp, Obrigatório para envio por E-mail)" class="w-full bg-gray-700 text-white p-3 rounded-lg border border-gray-600 focus:ring-2 focus:ring-cyan-500 focus:outline-none transition" />
                     <input type="tel" id="contact-phone" name="phone" placeholder="Seu WhatsApp/Telegram (Ex: 75981231019)" class="w-full bg-gray-700 text-white p-3 rounded-lg border border-gray-600 focus:ring-2 focus:ring-cyan-500 focus:outline-none transition" required />
@@ -542,7 +547,8 @@
         // --- ESTADO GLOBAL E CONSTANTES ---
         const MY_WHATSAPP_NUMBER = "5575981231019";
         const MY_EMAIL_ADDRESS = "deivilsantana@outlook.com";
-        const GEMINI_API_KEY = "AIzaSyBVJI8lkr2QTl1u7FWUjo5au2GGp7EhxFM"; // LEMBRE-SE DE PROTEGER ESTA CHAVE!        const FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID"; // SUBSTITUA PELO SEU ID REAL
+        let GEMINI_API_KEY = ""; // Será definido pelo usuário
+        const FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID"; // SUBSTITUA PELO SEU ID REAL
         
         let lastAiResponseRaw = ""; // Armazena a resposta crua da I.A.
         let currentMessageToSend = ""; // Armazena a mensagem (manual ou I.A.) para envio
@@ -774,7 +780,9 @@ IMPORTANTE: NÃO siga sempre o mesmo padrão! Seja criativo e específico para "
 
                 try {
                     const payload = { contents: [{ role: "user", parts: [{ text: promptText }] }] };
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
+                    const apiKey = getApiKey();
+                    if (!apiKey) return;
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
 
                     const response = await fetch(apiUrl, {
                         method: 'POST',
@@ -1364,7 +1372,9 @@ IMPORTANTE: NÃO siga sempre o mesmo padrão! Seja criativo e específico para "
 
                 try {
                     const payload = { contents: [{ role: "user", parts: [{ text: promptText }] }] };
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
+                    const apiKey = getApiKey();
+                    if (!apiKey) return;
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
 
                     console.log("Fazendo requisição para:", apiUrl.split('?')[0]); // Log sem a chave
 
