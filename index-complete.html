@@ -551,12 +551,6 @@
         ];
         let currentKeyIndex = 0;
         
-        // Rate limiting: 15 RPM por chave (tier gratuito)
-        const REQUEST_DELAY_MS = 5000; // 5 segundos entre requisições
-        let lastRequestTime = 0;
-        let requestQueue = [];
-        let isProcessingQueue = false;
-        
         const FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID"; // SUBSTITUA PELO SEU ID REAL
         
         let lastAiResponseRaw = ""; // Armazena a resposta crua da I.A.
@@ -789,7 +783,7 @@ IMPORTANTE: NÃO siga sempre o mesmo padrão! Seja criativo e específico para "
 
                 try {
                     const payload = { contents: [{ role: "user", parts: [{ text: promptText }] }] };
-                    const apiKey = await getApiKey();
+                    const apiKey = getApiKey();
                     if (!apiKey) return;
                     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
 
@@ -801,14 +795,7 @@ IMPORTANTE: NÃO siga sempre o mesmo padrão! Seja criativo e específico para "
 
                     if (!response.ok) {
                         const errorBody = await response.json().catch(() => ({ error: { message: response.statusText } }));
-                        const errorMsg = errorBody?.error?.message || response.statusText;
-                        
-                        // Se quota exceeded, informar ao usuário para aguardar
-                        if (errorMsg.includes('Quota exceeded') || errorMsg.includes('quota metric')) {
-                            throw new Error(`Rate limit atingido. Por favor, aguarde 5 segundos e tente novamente. (As chaves tem limite de 15 requisições por minuto)`);
-                        }
-                        
-                        throw new Error(`Erro na API Gemini: ${errorMsg}.`);
+                        throw new Error(`Erro na API Gemini: ${errorBody?.error?.message || response.statusText}.`);
                     }
 
                     const result = await response.json();
@@ -1274,19 +1261,7 @@ IMPORTANTE: NÃO siga sempre o mesmo padrão! Seja criativo e específico para "
                 // ou se o usuário cancelar a seleção de envio.
             });
 
-            async function getApiKey() {
-                // Garantir delay mínimo entre requisições
-                const now = Date.now();
-                const timeSinceLastRequest = now - lastRequestTime;
-                
-                if (timeSinceLastRequest < REQUEST_DELAY_MS) {
-                    const waitTime = REQUEST_DELAY_MS - timeSinceLastRequest;
-                    console.log(`⏱️ Aguardando ${Math.ceil(waitTime/1000)}s para evitar rate limit...`);
-                    await new Promise(resolve => setTimeout(resolve, waitTime));
-                }
-                
-                lastRequestTime = Date.now();
-                
+            function getApiKey() {
                 // Rotação automática entre as 3 chaves para distribuir rate limit
                 const key = GEMINI_API_KEYS[currentKeyIndex];
                 currentKeyIndex = (currentKeyIndex + 1) % GEMINI_API_KEYS.length;
@@ -1410,7 +1385,7 @@ IMPORTANTE: NÃO siga sempre o mesmo padrão! Seja criativo e específico para "
 
                 try {
                     const payload = { contents: [{ role: "user", parts: [{ text: promptText }] }] };
-                    const apiKey = await getApiKey();
+                    const apiKey = getApiKey();
                     if (!apiKey) return;
                     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
 
@@ -1424,14 +1399,7 @@ IMPORTANTE: NÃO siga sempre o mesmo padrão! Seja criativo e específico para "
 
                     if (!response.ok) {
                         const errorBody = await response.json().catch(() => ({ error: { message: response.statusText } }));
-                        const errorMsg = errorBody?.error?.message || response.statusText;
-                        
-                        // Se quota exceeded, informar ao usuário para aguardar
-                        if (errorMsg.includes('Quota exceeded') || errorMsg.includes('quota metric')) {
-                            throw new Error(`Rate limit atingido. Por favor, aguarde 5 segundos e tente novamente. (As chaves tem limite de 15 requisições por minuto)`);
-                        }
-                        
-                        throw new Error(`Erro na API Gemini: ${errorMsg}.`);
+                        throw new Error(`Erro na API Gemini: ${errorBody?.error?.message || response.statusText}.`);
                     }                    updateProgress(90, 'Processando resposta da I.A....', 300);
                     const result = await response.json();
                     console.log("Resposta da API recebida:", result);
@@ -1462,19 +1430,13 @@ IMPORTANTE: NÃO siga sempre o mesmo padrão! Seja criativo e específico para "
                     let errorMessage = `Desculpe, ocorreu um erro ao processar sua ideia. Tente novamente. <br><br><span class="text-sm text-gray-400">Detalhe: ${error.message}</span>`;
 
                     // Mensagem específica para chave inválida
-                    if (error.message.includes('API_KEY_INVALID') || error.message.includes('INVALID_ARGUMENT') || error.message.includes('PERMISSION_DENIED')) {
+                    if (error.message.includes('API_KEY_INVALID') || error.message.includes('INVALID_ARGUMENT') || error.message.includes('PERMISSION_DENIED') || error.message.includes('API key not valid')) {
                         errorMessage = `
                             <div class="bg-red-900/30 border-l-4 border-red-400 p-4 rounded-lg mb-4">
-                                <h5 class="text-red-400 font-bold mb-2">🔑 Chave da API Inválida</h5>
-                                <p class="text-gray-300 mb-2">A chave da API do Google Gemini precisa ser configurada para que a I.A. funcione.</p>
-                                <p class="text-sm text-gray-400 mb-2">Para obter uma chave válida:</p>
-                                <ol class="text-sm text-gray-400 list-decimal list-inside space-y-1">
-                                    <li>Acesse <a href="https://makersuite.google.com/app/apikey" target="_blank" class="text-cyan-400 hover:text-cyan-300 underline">Google AI Studio</a></li>
-                                    <li>Crie uma conta ou faça login</li>
-                                    <li>Gere uma nova chave de API</li>
-                                    <li>Substitua o valor de GEMINI_API_KEY no código fonte</li>
-                                </ol>
-                                <p class="text-xs text-gray-500 mt-2">A chave é gratuita para uso básico e não requer cartão de crédito.</p>
+                                <h5 class="text-red-400 font-bold mb-2">🔑 Problema com Chave da API</h5>
+                                <p class="text-gray-300 mb-2">Uma das chaves da API do Google Gemini está inválida ou expirou.</p>
+                                <p class="text-sm text-gray-400 mb-2">Sistema de rotação ativo: ${GEMINI_API_KEYS.length} chaves configuradas.</p>
+                                <p class="text-sm text-gray-400">Tentando automaticamente com próxima chave disponível...</p>
                             </div>
                         `;
                     }
