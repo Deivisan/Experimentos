@@ -1,138 +1,673 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experimentos - Laboratório Digital | Deivison Santana</title>
-    <meta name="description" content="Laboratório pessoal de experimentação tecnológica - Experimentos com I.A., desenvolvimento web e soluções inovadoras">
-    <meta name="keywords" content="experimentos, laboratório digital, I.A., desenvolvimento web, inovação, tecnologia">
-    <meta name="author" content="Deivison Santana">
+    <title>🧪 DeiviTech Lab - Laboratório de Experimentos Digitais</title>
+    <meta name="description" content="Bem-vindo ao meu laboratório pessoal de inovação! Explore 10+ experimentos tecnológicos com IA, web development e muito mais.">
     
-    <!-- Open Graph -->
-    <meta property="og:title" content="Experimentos - Laboratório Digital">
-    <meta property="og:description" content="Onde ideias experimentais ganham vida através da tecnologia">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://deivisan.github.io/Experimentos/">
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Estilos Customizados -->
     <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent-cyan: #06b6d4;
+            --accent-purple: #a855f7;
+        }
+        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            color: white;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
         }
         
-        .container {
-            text-align: center;
-            padding: 2rem;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            max-width: 600px;
-            margin: 2rem;
-        }
-        
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+        .gradient-text {
+            background: var(--primary-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
         
-        .subtitle {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
+        .experiment-card {
+            background: var(--bg-secondary);
+            border: 1px solid #334155;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
         }
         
-        .experiment-link {
-            display: inline-block;
-            padding: 15px 30px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            margin: 10px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        .experiment-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.1), transparent);
+            transition: left 0.6s;
         }
         
-        .experiment-link:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        .experiment-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 20px 40px rgba(6, 182, 212, 0.3);
         }
         
-        .github-link {
-            background: linear-gradient(45deg, #333, #555);
+        .experiment-card:hover::before {
+            left: 100%;
         }
         
-        .status {
-            background: rgba(34, 197, 94, 0.2);
-            border: 1px solid rgba(34, 197, 94, 0.5);
+        .status-active {
+            animation: pulse 2s infinite;
+        }
+        
+        .status-development {
+            animation: blink 3s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        
+        @keyframes blink {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0.4; }
+        }
+        
+        .floating-icon {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .tech-tag {
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            color: var(--accent-cyan);
+            padding: 4px 12px;
             border-radius: 20px;
-            padding: 10px 20px;
-            margin: 1rem 0;
-            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
         }
         
-        .experiments-count {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            margin-top: 1rem;
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            opacity: 0.6;
+            animation: float-up 20s infinite linear;
         }
         
-        @media (max-width: 768px) {
-            h1 { font-size: 2rem; }
-            .container { margin: 1rem; padding: 1.5rem; }
-            .experiment-link { padding: 12px 24px; font-size: 1rem; }
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .search-box {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid #334155;
+            backdrop-filter: blur(10px);
+        }
+        
+        .search-box:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.2);
+        }
+        
+        .monospace {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-cyan);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0891b2;
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <h1>🧪 Laboratório de Experimentos</h1>
-        <p class="subtitle">Onde ideias experimentais ganham vida através da tecnologia</p>
-        
-        <div class="status">
-            ✅ Laboratório Ativo - 1 Experimento Disponível
-        </div>
-        
-        <div style="margin: 2rem 0;">
-            <a href="./DT~Idealizador.html" class="experiment-link">
-                🚀 Experimento #001: Idealizador do Futuro
-            </a>
-            <br>
-            <a href="https://github.com/Deivisan/Experimentos" class="experiment-link github-link" target="_blank">
-                📁 Ver Código no GitHub
-            </a>
-        </div>
-        
-        <div class="experiments-count">
-            <p><strong>Desenvolvido por:</strong> Deivison Santana</p>
-            <p><strong>Tecnologias:</strong> HTML5, CSS3, JavaScript, Three.js, I.A.</p>
-            <p><strong>Próximos Experimentos:</strong> Dashboard I.A., App Mobile, IoT</p>
-        </div>
-    </div>
+<body class="min-h-screen">
+    <!-- Particles Background -->
+    <div id="particles-container"></div>
     
-    <script>
-        // Redirecionamento automático opcional (descomentado se quiser)
-        // setTimeout(() => {
-        //     window.location.href = './DT~Idealizador.html';
-        // }, 5000);
+    <!-- Header -->
+    <header class="fixed top-0 w-full bg-gray-900 bg-opacity-95 backdrop-blur-lg z-50 border-b border-gray-800">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-lg flex items-center justify-center floating-icon">
+                        <i class="fas fa-flask text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold gradient-text">DeiviTech Lab</h1>
+                        <p class="text-xs text-gray-400">Experimentos Digitais</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-6">
+                    <div class="hidden md:flex items-center space-x-4 text-sm">
+                        <span class="text-gray-400">10+ Experimentos</span>
+                        <span class="text-green-400">●</span>
+                        <span class="text-gray-400">Online</span>
+                    </div>
+                    
+                    <button id="theme-toggle" class="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-moon text-yellow-400"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center justify-center relative pt-20">
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-cyan-900/20 to-purple-900/20"></div>
+            <div class="absolute top-20 left-10 w-72 h-72 bg-cyan-500 rounded-full filter blur-3xl opacity-10 floating-icon"></div>
+            <div class="absolute bottom-20 right-10 w-96 h-96 bg-purple-500 rounded-full filter blur-3xl opacity-10 floating-icon" style="animation-delay: 3s"></div>
+        </div>
         
-        console.log('🧪 Bem-vindo ao Laboratório de Experimentos!');
-        console.log('🚀 Experimento #001: Idealizador do Futuro está ativo');
-        console.log('💻 Desenvolvido por Deivison Santana');
+        <div class="relative z-10 text-center">
+            <div class="mb-8">
+                <div class="w-20 h-20 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 floating-icon">
+                    <i class="fas fa-flask text-white text-3xl"></i>
+                </div>
+                <h1 class="text-5xl md:text-7xl font-bold mb-6">
+                    <span class="gradient-text">Laboratório de</span><br>
+                    <span class="text-white">Experimentos Digitais</span>
+                </h1>
+                <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                    Explore 10+ experimentos tecnológicos com IA, web development e inovações criativas
+                </p>
+                
+                <!-- Search Box -->
+                <div class="max-w-md mx-auto mb-8">
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            id="search-input"
+                            placeholder="🔍 Buscar experimentos..."
+                            class="search-box w-full px-6 py-4 rounded-full text-white placeholder-gray-400 pr-12"
+                        >
+                        <i class="fas fa-search absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+                    <button onclick="scrollToExperiments()" class="px-8 py-3 bg-gradient-to-r from-cyan-500 to-cyan-600 text-white font-bold rounded-full hover:from-cyan-600 hover:to-cyan-700 transition-all duration-300 transform hover:scale-105">
+                        <i class="fas fa-flask mr-2"></i>
+                        Explorar Experimentos
+                    </button>
+                    <button onclick="openRandomExperiment()" class="px-8 py-3 bg-gradient-to-r from-purple-500 to-purple-600 text-white font-bold rounded-full hover:from-purple-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105">
+                        <i class="fas fa-dice mr-2"></i>
+                        Experimento Aleatório
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center max-w-4xl mx-auto">
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-cyan-400">10+</div>
+                    <div class="text-gray-400">Experimentos</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-purple-400">15+</div>
+                    <div class="text-gray-400">Tecnologias</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-green-400">100%</div>
+                    <div class="text-gray-400">Online</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-yellow-400">24/7</div>
+                    <div class="text-gray-400">Disponível</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Experiments Grid -->
+    <section id="experiments" class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    <span class="gradient-text">Experimentos</span> Disponíveis
+                </h2>
+                <p class="text-xl text-gray-300">Clique em qualquer experimento para explorar</p>
+            </div>
+            
+            <div id="experiments-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Experiments serão injetados aqui via JavaScript -->
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="py-12 bg-gray-900 border-t border-gray-800">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <div class="flex items-center space-x-2 mb-2">
+                        <div class="w-8 h-8 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-flask text-white text-sm"></i>
+                        </div>
+                        <span class="text-lg font-bold gradient-text">DeiviTech Lab</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        © 2026 Deivison Santana. Laboratório Aberto de Experimentos.
+                    </p>
+                </div>
+                
+                <div class="flex space-x-6">
+                    <a href="https://github.com/Deivisan/Experimentos" target="_blank" class="text-gray-400 hover:text-cyan-400 transition-colors">
+                        <i class="fab fa-github text-xl"></i>
+                    </a>
+                    <a href="https://linkedin.com/in/deivisonlsantana" target="_blank" class="text-gray-400 hover:text-purple-400 transition-colors">
+                        <i class="fab fa-linkedin text-xl"></i>
+                    </a>
+                    <a href="https://wa.me/5575981231019" target="_blank" class="text-gray-400 hover:text-green-400 transition-colors">
+                        <i class="fab fa-whatsapp text-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Scripts -->
+    <script>
+        // Dados dos experimentos
+        const experiments = [
+            {
+                id: 'idealizador',
+                name: 'Idealizador do Futuro',
+                description: 'Plataforma de consultoria com IA para gerar ideias de projetos personalizados usando Gemini API',
+                status: 'active',
+                statusText: 'Funcionando',
+                statusIcon: '✅',
+                statusClass: 'status-active',
+                technologies: ['React', 'Gemini API', 'Tailwind', 'Chart.js'],
+                techColors: ['from-cyan-500', 'from-purple-600', 'from-green-500'],
+                icon: 'fa-brain',
+                color: 'from-cyan-500 to-purple-600',
+                url: 'DT~Idealizador.html',
+                category: 'IA & Machine Learning',
+                difficulty: 'Médio',
+                lastUpdate: '2026-01-20'
+            },
+            {
+                id: 'gerador-cores',
+                name: 'Gerador de Cores AI',
+                description: 'Gera paletas de cores baseadas em descrições textuais usando inteligência artificial',
+                status: 'active',
+                statusText: 'Funcionando',
+                statusIcon: '✅',
+                statusClass: 'status-active',
+                technologies: ['Gemini API', 'Canvas API', 'Color Theory'],
+                techColors: ['from-pink-500', 'from-purple-600', 'from-blue-500'],
+                icon: 'fa-palette',
+                color: 'from-pink-500 to-purple-600',
+                url: 'experiments/gerador-cores/index.html',
+                category: 'Design & Criatividade',
+                difficulty: 'Fácil',
+                lastUpdate: '2026-01-19'
+            },
+            {
+                id: 'dashboard',
+                name: 'Dashboard Analytics Real-time',
+                description: 'Visualização de dados em tempo real com gráficos interativos e WebSocket',
+                status: 'active',
+                statusText: 'Funcionando',
+                statusIcon: '✅',
+                statusClass: 'status-active',
+                technologies: ['Chart.js', 'WebSocket', 'D3.js', 'Real-time Data'],
+                techColors: ['from-blue-500', 'from-green-600', 'from-purple-500'],
+                icon: 'fa-chart-line',
+                color: 'from-blue-500 to-green-600',
+                url: 'experiments/dashboard/index.html',
+                category: 'Data Visualization',
+                difficulty: 'Médio',
+                lastUpdate: '2026-01-18'
+            },
+            {
+                id: 'snake-ai',
+                name: 'Jogo Snake com IA',
+                description: 'Jogo clássico da cobrinha com IA aprendendo a jogar em tempo real',
+                status: 'development',
+                statusText: 'Em Desenvolvimento',
+                statusIcon: '🚧',
+                statusClass: 'status-development',
+                technologies: ['Canvas API', 'Machine Learning', 'Game Development'],
+                techColors: ['from-green-500', 'from-blue-600', 'from-purple-500'],
+                icon: 'fa-gamepad',
+                color: 'from-green-500 to-blue-600',
+                url: 'experiments/snake-ai/index.html',
+                category: 'Games & Entretenimento',
+                difficulty: 'Difícil',
+                lastUpdate: '2026-01-17'
+            },
+            {
+                id: 'chatbot',
+                name: 'Chatbot Multi-Idioma',
+                description: 'Chat inteligente que traduz e responde em múltiplos idiomas automaticamente',
+                status: 'active',
+                statusText: 'Funcionando',
+                statusIcon: '✅',
+                statusClass: 'status-active',
+                technologies: ['Web Speech API', 'Translation API', 'NLP'],
+                techColors: ['from-blue-500', 'from-purple-600', 'from-pink-500'],
+                icon: 'fa-comments',
+                color: 'from-blue-500 to-purple-600',
+                url: 'experiments/chatbot/index.html',
+                category: 'IA & Comunicação',
+                difficulty: 'Médio',
+                lastUpdate: '2026-01-16'
+            },
+            {
+                id: 'music-generator',
+                name: 'Gerador de Música Algorítmica',
+                description: 'Cria músicas únicas baseadas em padrões matemáticos e algoritmos genéticos',
+                status: 'development',
+                statusText: 'Em Desenvolvimento',
+                statusIcon: '🚧',
+                statusClass: 'status-development',
+                technologies: ['Web Audio API', 'Music Theory', 'Algorithms'],
+                techColors: ['from-purple-500', 'from-pink-600', 'from-blue-500'],
+                icon: 'fa-music',
+                color: 'from-purple-500 to-pink-600',
+                url: 'experiments/music-generator/index.html',
+                category: 'Áudio & Criatividade',
+                difficulty: 'Difícil',
+                lastUpdate: '2026-01-15'
+            },
+            {
+                id: 'security-scanner',
+                name: 'Scanner de Segurança Web',
+                description: 'Analisa websites em busca de vulnerabilidades comuns e pontos de melhoria',
+                status: 'active',
+                statusText: 'Funcionando',
+                statusIcon: '✅',
+                statusClass: 'status-active',
+                technologies: ['Security Headers', 'OWASP', 'Web Standards'],
+                techColors: ['from-red-500', 'from-orange-600', 'from-yellow-500'],
+                icon: 'fa-shield-alt',
+                color: 'from-red-500 to-orange-600',
+                url: 'experiments/security-scanner/index.html',
+                category: 'Segurança & Ferramentas',
+                difficulty: 'Médio',
+                lastUpdate: '2026-01-14'
+            },
+            {
+                id: 'pwa-converter',
+                name: 'Conversor PWA',
+                description: 'Transforma qualquer site em Progressive Web App com funcionalidades offline',
+                status: 'active',
+                statusText: 'Funcionando',
+                statusIcon: '✅',
+                statusClass: 'status-active',
+                technologies: ['Service Workers', 'Web App Manifest', 'Caching'],
+                techColors: ['from-green-500', 'from-teal-600', 'from-blue-500'],
+                icon: 'fa-download',
+                color: 'from-green-500 to-teal-600',
+                url: 'experiments/pwa-converter/index.html',
+                category: 'Ferramentas & Utilitários',
+                difficulty: 'Fácil',
+                lastUpdate: '2026-01-13'
+            },
+            {
+                id: 'interface-clone',
+                name: 'Clonador de Interface com IA',
+                description: 'Recria interfaces web usando apenas inteligência artificial e Canvas',
+                status: 'development',
+                statusText: 'Em Desenvolvimento',
+                statusIcon: '🚧',
+                statusClass: 'status-development',
+                technologies: ['Canvas ML', 'Computer Vision', 'AI APIs'],
+                techColors: ['from-indigo-500', 'from-purple-600', 'from-pink-500'],
+                icon: 'fa-desktop',
+                color: 'from-indigo-500 to-purple-600',
+                url: 'experiments/interface-clone/index.html',
+                category: 'IA Experimental',
+                difficulty: 'Expert',
+                lastUpdate: '2026-01-12'
+            },
+            {
+                id: 'multi-browser',
+                name: 'Navegador Multi-Engine',
+                description: 'Interface unificada com múltiplos engines de busca e navegação simultânea',
+                status: 'active',
+                statusText: 'Funcionando',
+                statusIcon: '✅',
+                statusClass: 'status-active',
+                technologies: ['Iframes', 'Navigation API', 'Multi-search'],
+                techColors: ['from-blue-500', 'from-purple-600', 'from-teal-500'],
+                icon: 'fa-globe',
+                color: 'from-blue-500 to-purple-600',
+                url: 'experiments/multi-browser/index.html',
+                category: 'Navegação & Ferramentas',
+                difficulty: 'Médio',
+                lastUpdate: '2026-01-11'
+            }
+        ];
+        
+        // Funções principais
+        function renderExperiments(experimentsToRender = experiments) {
+            const grid = document.getElementById('experiments-grid');
+            
+            if (experimentsToRender.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-20">
+                        <i class="fas fa-search text-6xl text-gray-600 mb-4"></i>
+                        <h3 class="text-2xl font-bold text-gray-400 mb-2">Nenhum experimento encontrado</h3>
+                        <p class="text-gray-500">Tente outros termos de busca</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = experimentsToRender.map(exp => `
+                <div class="experiment-card rounded-2xl p-8 cursor-pointer" onclick="openExperiment('${exp.id}')">
+                    <div class="flex items-start justify-between mb-6">
+                        <div>
+                            <div class="flex items-center space-x-3 mb-3">
+                                <div class="w-12 h-12 bg-gradient-to-r ${exp.color} rounded-lg flex items-center justify-center">
+                                    <i class="fas ${exp.icon} text-white"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-bold text-white mb-1">${exp.name}</h3>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="status-indicator ${exp.statusClass}">${exp.statusIcon}</span>
+                                        <span class="text-sm ${exp.status === 'active' ? 'text-green-400' : exp.status === 'development' ? 'text-yellow-400' : 'text-gray-400'}">${exp.statusText}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-xs text-gray-400 monospace">${exp.id}</div>
+                    </div>
+                    
+                    <p class="text-gray-300 mb-6 leading-relaxed">${exp.description}</p>
+                    
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        ${exp.technologies.map((tech, index) => `
+                            <span class="tech-tag" style="background: linear-gradient(${exp.techColors[index] || 'from-gray-500'}, transparent); border-color: ${exp.techColors[index] || '#6b7280'}">
+                                ${tech}
+                            </span>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <div class="text-sm text-gray-400">
+                            <span class="inline-block px-3 py-1 bg-gray-800 rounded-full text-xs mb-2">${exp.category}</span>
+                            <span class="ml-2">📊 ${exp.difficulty}</span>
+                        </div>
+                        <div class="text-xs text-gray-500 text-right">
+                            <div>Atualizado</div>
+                            <div>${exp.lastUpdate}</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function openExperiment(id) {
+            const experiment = experiments.find(exp => exp.id === id);
+            if (experiment) {
+                // Para experimentos existentes, redirecionar direto
+                if (experiment.url.includes('DT~Idealizador.html') || !experiment.url.includes('experiments/')) {
+                    window.location.href = experiment.url;
+                } else {
+                    // Para novos experimentos, mostrar loading
+                    showLoadingAndRedirect(experiment);
+                }
+            }
+        }
+        
+        function showLoadingAndRedirect(experiment) {
+            document.body.innerHTML = `
+                <div class="min-h-screen flex items-center justify-center bg-gray-900">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-r ${experiment.color} rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas ${experiment.icon} text-white text-2xl animate-spin"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-white mb-2">Carregando ${experiment.name}...</h2>
+                        <p class="text-gray-400">Preparando o laboratório para você</p>
+                    </div>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                window.location.href = experiment.url;
+            }, 2000);
+        }
+        
+        function openRandomExperiment() {
+            const activeExperiments = experiments.filter(exp => exp.status === 'active');
+            if (activeExperiments.length > 0) {
+                const random = activeExperiments[Math.floor(Math.random() * activeExperiments.length)];
+                openExperiment(random.id);
+            }
+        }
+        
+        function scrollToExperiments() {
+            document.getElementById('experiments').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function searchExperiments() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            
+            if (!searchTerm) {
+                renderExperiments();
+                return;
+            }
+            
+            const filtered = experiments.filter(exp => 
+                exp.name.toLowerCase().includes(searchTerm) ||
+                exp.description.toLowerCase().includes(searchTerm) ||
+                exp.technologies.some(tech => tech.toLowerCase().includes(searchTerm)) ||
+                exp.category.toLowerCase().includes(searchTerm)
+            );
+            
+            renderExperiments(filtered);
+        }
+        
+        function createParticles() {
+            const container = document.getElementById('particles-container');
+            const particleCount = 15;
+            
+            for (let i = 0; i < particleCount; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.cssText = `
+                        left: ${Math.random() * 100}%;
+                        width: ${Math.random() * 4 + 2}px;
+                        height: ${Math.random() * 4 + 2}px;
+                        background: ${['#06b6d4', '#a855f7', '#10b981', '#f59e0b'][Math.floor(Math.random() * 4)]};
+                        border-radius: 50%;
+                        animation-delay: ${Math.random() * 20}s;
+                        animation-duration: ${15 + Math.random() * 10}s;
+                    `;
+                    container.appendChild(particle);
+                    
+                    setTimeout(() => particle.remove(), 20000);
+                }, i * 1000);
+            }
+        }
+        
+        // Event listeners
+        document.getElementById('search-input').addEventListener('input', searchExperiments);
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.getElementById('search-input').value = '';
+                searchExperiments();
+            }
+        });
+        
+        // Theme toggle (placeholder)
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            document.body.classList.toggle('light-theme');
+        });
+        
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            renderExperiments();
+            createParticles();
+            
+            // Atualizar particles periodicamente
+            setInterval(createParticles, 30000);
+        });
+        
+        // Adicionar código personalizado
+        console.log('🧪 DeiviTech Lab initialized');
+        console.log('📊 Available experiments:', experiments.length);
+        console.log('🚀 Ready for exploration!');
     </script>
 </body>
 </html>

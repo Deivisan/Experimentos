@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎨 Gerador de Cores IA - DeiviTech Lab</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="../shared/css/components.css">
+    
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
+            --secondary-gradient: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent-pink: #ec4899;
+            --accent-purple: #a855f7;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+        
+        .gradient-text {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .color-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+        
+        .color-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(236, 72, 153, 0.3);
+            border-color: var(--accent-pink);
+        }
+        
+        .color-preview {
+            aspect-ratio: 1;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        
+        .color-card:hover .color-preview {
+            transform: scale(1.1);
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--accent-pink);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .monospace {
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(0, 0, 0, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        
+        .preview-container {
+            min-height: 200px;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+        
+        .control-select {
+            background: var(--bg-secondary);
+            border: 1px solid #334155;
+            color: var(--text-primary);
+            padding: 8px 12px;
+            border-radius: 8px;
+        }
+        
+        .control-select:focus {
+            outline: none;
+            border-color: var(--accent-pink);
+            box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="fixed top-0 w-full bg-gray-900 bg-opacity-95 backdrop-blur-lg z-50 border-b border-gray-800">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-pink-500 to-purple-600 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-palette text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold gradient-text">Gerador de Cores IA</h1>
+                        <p class="text-xs text-gray-400">Experimento #002</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <a href="../" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fas fa-flask mr-2"></i>
+                        Laboratório
+                    </a>
+                    <button onclick="showHistory()" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fas fa-history mr-2"></i>
+                        Histórico
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="pt-20 pb-20">
+        <div class="container mx-auto px-6">
+            <div class="max-w-6xl mx-auto">
+                <!-- Input Section -->
+                <section class="bg-gray-800 rounded-2xl p-8 mb-8 border border-gray-700">
+                    <h2 class="text-2xl font-bold gradient-text mb-6">
+                        🎨 Descreva sua Paleta
+                    </h2>
+                    
+                    <div class="space-y-4 mb-6">
+                        <textarea 
+                            id="concept-input"
+                            placeholder="Ex: 'Praia ensolarada e relaxante', 'Floresta mágica e encantada', 'Tecnologia futurista com tons de azul'..."
+                            class="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-500 resize-none"
+                            rows="3"
+                        ></textarea>
+                        
+                        <div class="flex items-center space-x-4">
+                            <select id="mode-select" class="control-select">
+                                <option value="concept">Conceito</option>
+                                <option value="emotion">Sentimento</option>
+                                <option value="brand">Marca</option>
+                                <option value="random">Aleatório</option>
+                            </select>
+                            
+                            <button 
+                                id="generate-btn"
+                                onclick="generatePalette()"
+                                class="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all duration-300"
+                            >
+                                <i class="fas fa-magic mr-2"></i>
+                                Gerar Paleta
+                            </button>
+                            
+                            <button 
+                                onclick="generateRandom()"
+                                class="px-6 py-3 bg-gray-700 text-white font-semibold rounded-lg hover:bg-gray-600 transition-colors"
+                            >
+                                <i class="fas fa-dice mr-2"></i>
+                                Aleatório
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Examples -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                        <button onclick="setExample('Praia ensolarada e relaxante')" class="text-sm px-3 py-2 bg-gray-700 text-gray-300 rounded hover:bg-gray-600 transition-colors">
+                            🏖️ Praia
+                        </button>
+                        <button onclick="setExample('Floresta mágica e encantada')" class="text-sm px-3 py-2 bg-gray-700 text-gray-300 rounded hover:bg-gray-600 transition-colors">
+                            🌲 Floresta
+                        </button>
+                        <button onclick="setExample('Tecnologia futurista com azul e roxo')" class="text-sm px-3 py-2 bg-gray-700 text-gray-300 rounded hover:bg-gray-600 transition-colors">
+                            💻 Futurista
+                        </button>
+                        <button onclick="setExample('Cores vibrantes e energia')" class="text-sm px-3 py-2 bg-gray-700 text-gray-300 rounded hover:bg-gray-600 transition-colors">
+                            ⚡ Energia
+                        </button>
+                    </div>
+                </section>
+                
+                <!-- Loading Section -->
+                <section id="loading" class="hidden bg-gray-800 rounded-2xl p-12 text-center mb-8 border border-gray-700">
+                    <div class="flex flex-col items-center space-y-4">
+                        <div class="spinner"></div>
+                        <div>
+                            <h3 class="text-xl font-semibold gradient-text">Gerando Paleta com IA...</h3>
+                            <p class="text-gray-400">Criando cores harmoniosas baseadas no seu conceito</p>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Result Section -->
+                <section id="result" class="hidden">
+                    <div class="bg-gray-800 rounded-2xl p-8 border border-gray-700 mb-8">
+                        <div class="flex items-center justify-between mb-6">
+                            <div>
+                                <h3 class="text-2xl font-bold text-white">Sua Paleta de Cores</h3>
+                                <div id="result-meta" class="text-gray-400 mt-1">
+                                    <span id="generated-count"></span> • <span id="generation-time"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex space-x-3">
+                                <button onclick="exportCSS()" class="px-4 py-2 bg-gray-700 text-gray-300 rounded hover:bg-gray-600 transition-colors">
+                                    <i class="fas fa-file-code mr-2"></i>
+                                    CSS
+                                </button>
+                                <button onclick="exportSCSS()" class="px-4 py-2 bg-gray-700 text-gray-300 rounded hover:bg-gray-600 transition-colors">
+                                    <i class="fab fa-sass mr-2"></i>
+                                    SCSS
+                                </button>
+                                <button onclick="copyPalette()" class="px-4 py-2 bg-gray-700 text-gray-300 rounded hover:bg-gray-600 transition-colors">
+                                    <i class="fas fa-copy mr-2"></i>
+                                    Copiar
+                                </button>
+                                <button onclick="sharePalette()" class="px-4 py-2 bg-gray-700 text-gray-300 rounded hover:bg-gray-600 transition-colors">
+                                    <i class="fas fa-share-alt mr-2"></i>
+                                    Compartilhar
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Color Grid -->
+                        <div id="palette-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                            <!-- Colors will be injected here -->
+                        </div>
+                        
+                        <!-- Preview Section -->
+                        <div>
+                            <h4 class="text-lg font-semibold text-white mb-4">Preview Aplicado</h4>
+                            <div id="preview-container" class="preview-container">
+                                <div class="text-center">
+                                    <p class="text-gray-600 mb-4">Clique nas cores acima para preview</p>
+                                    <p class="text-sm text-gray-500">Dê clique duplo para copiar o código HEX</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- History Section -->
+                <section id="history" class="hidden">
+                    <div class="bg-gray-800 rounded-2xl p-8 border border-gray-700">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-2xl font-bold text-white">
+                                <i class="fas fa-history mr-2"></i>
+                                Histórico de Paletas
+                            </h3>
+                            <button onclick="hideHistory()" class="text-gray-400 hover:text-white transition-colors">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        
+                        <div id="history-grid" class="space-y-4 max-h-96 overflow-y-auto">
+                            <!-- History items will be injected here -->
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Tips Section -->
+                <section class="bg-gray-800 rounded-2xl p-8 border border-gray-700">
+                    <h3 class="text-xl font-bold text-white mb-4">
+                        <i class="fas fa-lightbulb mr-2"></i>
+                        Dicas para Melhores Resultados
+                    </h3>
+                    
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="font-semibold text-pink-400 mb-2">📝 Seja Específico</h4>
+                            <p class="text-gray-300 text-sm">Descreva exatamente o estilo desejado: "minimalista clean com tons pastel" em vez de "design bonito"</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-purple-400 mb-2">🎨 Use Emoções</h4>
+                            <p class="text-gray-300 text-sm">Inclua sentimentos: "alegre e vibrante", "calmo e profissional", "dramático e intenso"</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-cyan-400 mb-2">🌈 Mencione Contexto</h4>
+                            <p class="text-gray-300 text-sm">Adicione contexto: "para app mobile infantil", "para empresa financeira", "para site de notícias"</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-green-400 mb-2">🎯 Combine Elementos</h4>
+                            <p class="text-gray-300 text-sm">Misture conceitos: "tecnologia futurista com tons azul e metálico""</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="py-8 bg-gray-900 border-t border-gray-800">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-gray-400">
+                🎨 Experimento #002 - Gerador de Cores IA | 
+                <a href="../" class="text-pink-400 hover:text-pink-300 transition-colors">DeiviTech Lab</a>
+            </p>
+        </div>
+    </footer>
+    
+    <!-- Scripts -->
+    <script src="../shared/js/components.js"></script>
+    <script src="https://deivisan.github.io/Experimentos/js/ai-client.js"></script>
+    
+    <script>
+        let currentPalette = [];
+        let generationStartTime = 0;
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadHistory();
+            setupEventListeners();
+        });
+        
+        function setupEventListeners() {
+            document.getElementById('concept-input').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && e.ctrlKey) {
+                    generatePalette();
+                }
+            });
+        }
+        
+        // Allow submit with Enter in textarea
+        document.getElementById('concept-input').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                generatePalette();
+            }
+        });
+        }
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                hideHistory();
+            }
+        });
+        }
+        
+        async function generatePalette() {
+            const concept = document.getElementById('concept-input').value.trim();
+            const mode = document.getElementById('mode-select').value;
+            
+            if (!concept) {
+                showNotification('Por favor, descreva um conceito para a paleta', 'warning');
+                return;
+            }
+            
+            showLoading();
+            generationStartTime = Date.now();
+            
+            try {
+                const prompt = buildPrompt(concept, mode);
+                const response = await DeiviTechAI.query(prompt, {
+                    category: 'color-generation',
+                    temperature: mode === 'random' ? 1.0 : 0.8,
+                    maxLength: 2000
+                });
+                
+                if (response.success) {
+                    currentPalette = JSON.parse(response.data);
+                    displayPalette(currentPalette);
+                    saveToHistory(concept, currentPalette, mode);
+                } else {
+                    if (response.rateLimited) {
+                        showNotification(`Limite de requisições excedido. Tente novamente em ${response.retryAfter}s.`, 'error');
+                    } else {
+                        showNotification('Erro ao gerar paleta: ' + response.error, 'error');
+                    }
+                }
+            } catch (error) {
+                showNotification('Erro na comunicação com a IA', 'error');
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        function buildPrompt(concept, mode) {
+            let prompt = '';
+            
+            switch(mode) {
+                case 'concept':
+                    prompt = `Como especialista em design e teoria de cores, gere uma paleta harmônica baseada no conceito: "${concept}"
+
+Crie 5 cores principais com:
+1. Nome descritivo e criativo
+2. Código HEX válido (sem #)
+3. Valores RGB numéricos
+4. Descrição do sentimento ou tema que a cor representa
+5. Variação mais clara e mais escura
+
+As cores devem ser visualmente agradáveis e semanticamente apropriadas ao conceito.
+
+Retorne apenas o array JSON, sem texto adicional.`;
+                    break;
+                    
+                case 'emotion':
+                    prompt = `Como especialista em psicologia das cores, gere uma paleta que expressa o sentimento: "${concept}"
+
+Crie 5 cores que evocam "${concept}" com:
+1. Nome psicológico da cor
+2. Código HEX válido
+3. Valores RGB
+4. Descrição da emoção representada
+5. Variações de intensidade
+
+As cores devem ser equilibradas e apropriadas ao sentimento desejado.
+
+Retorne apenas o array JSON.`;
+                    break;
+                    
+                case 'brand':
+                    prompt = `Como consultor de branding, gere uma paleta profissional para marca com tema: "${concept}"
+
+Crie 5 cores corporativas com:
+1. Nome corporativo
+2. Código HEX válido
+3. Valores RGB
+4. Posicionamento da cor (ex: primária, secundária, acento)
+5. Variações para diferentes aplicações
+
+As cores devem ser profissionais, memoráveis e adequadas para uso corporativo.
+
+Retorne apenas o array JSON.`;
+                    break;
+                    
+                case 'random':
+                    prompt = `Como designer criativo, gere uma paleta de cores ousada e única.
+
+Crie 5 cores inesperadas com:
+1. Nome inspirador e único
+2. Código HEX válido
+3. Valores RGB
+4. Conceito ou inspiração por trás da cor
+5. Variações harmônicas
+
+Seja criativo e surpreendente!
+
+Retorne apenas o array JSON.`;
+                    break;
+                    
+                default:
+                    return buildPrompt(concept, 'concept');
+            }
+            
+            return prompt;
+        }
+        
+        function displayPalette(palette) {
+            const result = document.getElementById('result');
+            const grid = document.getElementById('palette-grid');
+            
+            // Update meta
+            const generationTime = Date.now() - generationStartTime;
+            document.getElementById('generated-count').textContent = `${palette.length} cores`;
+            document.getElementById('generation-time').textContent = `${generationTime}ms`;
+            
+            // Display colors
+            grid.innerHTML = palette.map((color, index) => `
+                <div class="color-card" data-index="${index}">
+                    <div class="color-preview" style="background: ${color.hex}"></div>
+                    <div class="p-4">
+                        <h4 class="font-bold text-white mb-2">${color.name}</h4>
+                        <div class="flex items-center space-x-2 mb-2">
+                            <span class="monospace text-xs">${color.hex}</span>
+                            <button 
+                                onclick="copyToClipboard('${color.hex}')"
+                                class="text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded text-gray-300"
+                                title="Copiar HEX"
+                            >
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <div class="text-gray-300 text-sm mb-2">RGB(${color.rgb.join(', ')})</div>
+                        <p class="text-gray-400 text-sm mb-3">${color.description}</p>
+                        
+                        <div class="space-y-2">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs text-gray-400">Mais Clara:</span>
+                                <div class="w-16 h-8 rounded border border-gray-600" style="background: ${color.variations.lighter}"></div>
+                                <span class="text-xs text-gray-300">${color.variations.lighter}</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs text-gray-400">Mais Escura:</span>
+                                <div class="w-16 h-8 rounded border border-gray-600" style="background: ${color.variations.darker}"></div>
+                                <span class="text-xs text-gray-300">${color.variations.darker}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            result.classList.remove('hidden');
+            grid.classList.remove('hidden');
+            
+            // Add interactivity
+            setTimeout(() => {
+                document.querySelectorAll('.color-card').forEach((card, index) => {
+                    card.addEventListener('click', () => {
+                        applyPreviewColor(palette[index]);
+                    });
+                    
+                    card.addEventListener('dblclick', () => {
+                        copyToClipboard(palette[index].hex);
+                        showNotification('Cor copiada: ' + palette[index].hex, 'success');
+                    });
+                });
+            }, 100);
+        }
+        
+        function applyPreviewColor(color) {
+            const container = document.getElementById('preview-container');
+            
+            // Create a sample UI with the selected color
+            container.innerHTML = `
+                <div style="padding: 20px; background: white; border-radius: 8px; color: #333;">
+                    <h3 style="margin: 0 0 20px 0; color: ${color.hex};">Preview com ${color.name}</h3>
+                    <p style="margin-bottom: 20px;">Este é um exemplo de como a cor "${color.name}" pode ser aplicada.</p>
+                    
+                    <button style="background: ${color.hex}; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">
+                        <strong>Botão Principal</strong>
+                    </button>
+                    <div style="background: #f5f5f5; border-radius: 4px; padding: 10px; margin-top: 10px;">
+                        <span style="color: #333;">Texto de exemplo em fundo branco</span>
+                    </div>
+                </div>
+            `;
+            
+            // Add animation
+            container.style.animation = 'slideIn 0.3s ease-out';
+        }
+        
+        function setExample(example) {
+            document.getElementById('concept-input').value = example;
+            generatePalette();
+        }
+        
+        function generateRandom() {
+            const concepts = [
+                "Universo paralelo com cores psiquedélicas",
+                "Cidade steampunk ao pôr do sol",
+                "Jardim secreto com criaturas mágicas",
+                "Paleta de cores para festa tropical",
+                "Minimalismo escandinavo com detalhes dourados",
+                "Neons dos anos 80 com vibras fortes",
+                "Cores de um videgame retro",
+                "Paleta de um spa de luxo",
+                "Cores naturais de uma floresta tropical",
+                "Design cyberpunk com tons neon",
+                "Cores pastel para quarto de bebê"
+            ];
+            
+            const randomConcept = concepts[Math.floor(Math.random() * concepts.length)];
+            document.getElementById('concept-input').value = randomConcept;
+            document.getElementById('mode-select').value = 'random';
+            generatePalette();
+        }
+        
+        function showLoading() {
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('result').classList.add('hidden');
+            document.getElementById('history').classList.add('hidden');
+        }
+        
+        function hideLoading() {
+            document.getElementById('loading').classList.add('hidden');
+        }
+        
+        function showHistory() {
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('result').classList.add('hidden');
+            document.getElementById('history').classList.remove('hidden');
+        }
+        
+        function hideHistory() {
+            document.getElementById('history').classList.add('hidden');
+        }
+        
+        function exportCSS() {
+            if (currentPalette.length === 0) return;
+            
+            let css = ':root {\n';
+            css += currentPalette.map((color, index) => {
+                css += `  --color-${index + 1}: ${color.hex};\n`;
+                css += `  --color-${index + 1}-rgb: ${color.rgb.join(', ')};\n`;
+                css += `  --color-${index + 1}-light: ${color.variations.lighter};\n`;
+                css += `  --color-${index + 1}-dark: ${color.variations.darker};\n`;
+            }).join('}\n';
+            css += '}\n\n';
+            
+            css += '/* Classes de utilidade */\n';
+            currentPalette.forEach((color, index) => {
+                css += `.bg-color-${index + 1} { background-color: var(--color-${index + 1}); }\n`;
+                css += `.text-color-${index + 1} { color: var(--color-${index + 1}); }\n`;
+                css += `.border-color-${index + 1} { border-color: var(--color-${index + 1}); }\n`;
+            });
+            
+            copyToClipboard(css);
+            showNotification('CSS copiado para a área de transferência!', 'success');
+        }
+        
+        function exportSCSS() {
+            if (currentPalette.length === 0) return;
+            
+            let scss = '$colors: (\n';
+            scss += currentPalette.map((color, index) => {
+                return `  'color-${index + 1}': ${color.hex},\n` +
+                       `    'color-${index + 1}-rgb': (${color.rgb.join(', ')},\n` +
+                       `    'color-${index + 1}-light': ${color.variations.lighter},\n` +
+                       `    'color-${index + 1}-dark': ${color.variations.darker}\n`;
+            }).join('');
+            scss += ');\n\n';
+            
+            scss += '/* Mixins SCSS */\n';
+            currentPalette.forEach((color, index) => {
+                scss += `@mixin bg-color-${index + 1} { background-color: $colors.('color-${index + 1}); }\n`;
+                scss += `@mixin text-color-${index + 1} { color: $colors.('color-${index + 1}); }\n`;
+                scss += `@mixin border-color-${index + 1} { border-color: $colors.('color-${index + 1}); }\n`;
+            });
+            
+            copyToClipboard(scss);
+            showNotification('SCSS copiado para a área de transferência!', 'success');
+        }
+        
+        function copyPalette() {
+            const paletteText = currentPalette.map(color => 
+                `${color.name}: ${color.hex}`
+            ).join('\n');
+            
+            copyToClipboard(paletteText);
+            showNotification('Paleta copiada para a área de transferência!', 'success');
+        }
+        
+        function sharePalette() {
+            if (navigator.share) {
+                const paletteText = currentPalette.map(color => 
+                    `${color.name}: ${color.hex}`
+                ).join('\n');
+                
+                navigator.share({
+                    title: 'Paleta de Cores - DeiviTech Lab',
+                    text: `Minha paleta gerada com IA:\n\n${paletteText}`
+                }).catch(err => {
+                    console.log('Share failed:', err);
+                    copyPalette();
+                });
+            } else {
+                copyPalette();
+            }
+        }
+        
+        function saveToHistory(concept, palette, mode) {
+            const history = JSON.parse(localStorage.getItem('color-history') || '[]');
+            
+            const historyItem = {
+                id: Date.now(),
+                concept: concept,
+                mode: mode,
+                palette: palette,
+                timestamp: new Date().toISOString(),
+                favorite: false
+            };
+            
+            history.unshift(historyItem);
+            
+            // Keep only last 20 items
+            const limitedHistory = history.slice(0, 20);
+            localStorage.setItem('color-history', JSON.stringify(limitedHistory));
+            
+            updateHistoryDisplay();
+        }
+        
+        function loadHistory() {
+            const history = JSON.parse(localStorage.getItem('color-history') || '[]');
+            updateHistoryDisplay(history);
+        }
+        
+        function updateHistoryDisplay(history = null) {
+            if (!history) {
+                history = JSON.parse(localStorage.getItem('color-history') || '[]');
+            }
+            
+            const grid = document.getElementById('history-grid');
+            
+            if (history.length === 0) {
+                grid.innerHTML = `
+                    <div class="text-center text-gray-500 py-8">
+                        <i class="fas fa-history text-4xl mb-2"></i>
+                        <p>Nenhuma paleta no histórico ainda</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = history.map(item => `
+                <div class="bg-gray-700 rounded-lg p-4 border border-gray-600 cursor-pointer hover:border-gray-500 transition-colors" onclick="loadFromHistory(${item.id})">
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <h4 class="font-semibold text-white">${item.concept.substring(0, 50)}${item.concept.length > 50 ? '...' : ''}</h4>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs bg-gray-600 px-2 py-1 rounded">${item.mode}</span>
+                                ${item.favorite ? '<i class="fas fa-star text-yellow-400"></i>' : '<i class="far fa-star text-gray-500"></i>'}
+                            </div>
+                        </div>
+                        <div class="text-xs text-gray-400">
+                            ${new Date(item.timestamp).toLocaleDateString()}
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-2">
+                        ${item.palette.slice(0, 3).map((color, index) => `
+                            <div class="w-8 h-8 rounded" style="background: ${color.hex}" title="${color.name}"></div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function loadFromHistory(id) {
+            const history = JSON.parse(localStorage.getItem('color-history') || '[]');
+            const item = history.find(h => h.id === id);
+            
+            if (item) {
+                document.getElementById('concept-input').value = item.concept;
+                document.getElementById('mode-select').value = item.mode;
+                currentPalette = item.palette;
+                displayPalette(currentPalette);
+                
+                // Update meta
+                const generationTime = 1500; // Simulated
+                document.getElementById('generated-count').textContent = `${item.palette.length} cores`;
+                document.getElementById('generation-time').textContent = `${generationTime}ms`;
+                
+                hideHistory();
+                document.getElementById('result').classList.remove('hidden');
+            }
+        }
+        
+        // Initialize with random example
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                setExample('Cores vibrantes e energia');
+            }, 500);
+        });
+        
+        console.log('🎨 Gerador de Cores IA initialized');
+        console.log('🚀 Ready to create amazing palettes!');
+    </script>
+</body>
+</html>
