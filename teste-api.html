@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste API Gemini - DeiviTech</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #111827; color: #e5e7eb; }
+        .text-gradient { background: linear-gradient(to right, #22d3ee, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center">
+    <div class="max-w-2xl mx-auto p-8">
+        <div class="bg-gray-800 rounded-lg p-8 shadow-xl">
+            <h1 class="text-3xl font-bold text-gradient mb-6">🧪 Teste Gemini API</h1>
+            
+            <div class="mb-6">
+                <label class="block text-sm font-medium mb-2">Digite seu prompt:</label>
+                <textarea id="promptInput" class="w-full px-4 py-2 bg-gray-700 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none" rows="4" placeholder="Ex: Analise a profissão de contador..."></textarea>
+            </div>
+            
+            <button onclick="testAPI()" class="w-full bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-bold py-3 px-6 rounded-lg hover:from-cyan-600 hover:to-purple-700 transition-all duration-300 mb-4">
+                🚀 Testar API
+            </button>
+            
+            <div id="result" class="hidden">
+                <h3 class="text-xl font-semibold mb-3 text-gradient">Resultado:</h3>
+                <div id="resultText" class="bg-gray-700 p-4 rounded-lg whitespace-pre-wrap"></div>
+            </div>
+            
+            <div id="error" class="hidden bg-red-900 bg-opacity-50 border border-red-500 text-red-200 p-4 rounded-lg">
+                <h3 class="text-xl font-semibold mb-2">❌ Erro:</h3>
+                <div id="errorText"></div>
+            </div>
+            
+            <div id="status" class="mt-6 text-sm text-gray-400">
+                <div>API Status: <span id="apiStatus" class="text-yellow-400">Verificando...</span></div>
+                <div>Requisições hoje: <span id="requestCount">0</span></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/gemini-config-fixed.js"></script>
+    <script>
+        async function testAPI() {
+            const prompt = document.getElementById('promptInput').value;
+            if (!prompt.trim()) {
+                alert('Digite um prompt!');
+                return;
+            }
+            
+            // Mostrar loading
+            document.getElementById('result').classList.add('hidden');
+            document.getElementById('error').classList.add('hidden');
+            
+            const statusEl = document.getElementById('apiStatus');
+            statusEl.textContent = 'Processando...';
+            statusEl.className = 'text-yellow-400';
+            
+            try {
+                const response = await GeminiAPI.call(prompt);
+                
+                if (response.success) {
+                    document.getElementById('resultText').textContent = response.text;
+                    document.getElementById('result').classList.remove('hidden');
+                    statusEl.textContent = '✅ Funcionando';
+                    statusEl.className = 'text-green-400';
+                } else {
+                    throw new Error(response.error);
+                }
+            } catch (error) {
+                document.getElementById('errorText').textContent = error.message;
+                document.getElementById('error').classList.remove('hidden');
+                statusEl.textContent = '❌ Erro';
+                statusEl.className = 'text-red-400';
+            }
+            
+            updateStatus();
+        }
+        
+        function updateStatus() {
+            const status = GeminiAPI.getStatus();
+            document.getElementById('requestCount').textContent = status.requestsToday;
+        }
+        
+        // Atualizar status ao carregar
+        setTimeout(() => {
+            const status = GeminiAPI.getStatus();
+            const statusEl = document.getElementById('apiStatus');
+            statusEl.textContent = status.apiKeyValid ? '✅ Pronta' : '⚠️ Chave inválida';
+            statusEl.className = status.apiKeyValid ? 'text-green-400' : 'text-yellow-400';
+            updateStatus();
+        }, 500);
+    </script>
+</body>
+</html>

@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeiviTech - Consultoria e Desenvolvimento com I.A. | V2.0</title>
+    <meta name="description" content="Transforme suas ideias em realidade com IA. Consultoria de inovação tecnológica, desenvolvimento web e soluções digitais personalizadas.">
+    <meta name="keywords" content="IA, consultoria tecnológica, desenvolvimento web, inovação digital, DeiviTech">
+    <meta name="author" content="Deivison Santana">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="DeiviTech - Inovação com I.A.">
+    <meta property="og:description" content="Transforme ideias em realidade com inteligência artificial">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://deivisan.github.io/Experimentos/">
+    <meta property="og:image" content="https://via.placeholder.com/1200x630/22d3ee/a855f7?text=DeiviTech+IA">
+    
+    <!-- Preconnect para performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- Estilos customizados -->
+    <link rel="stylesheet" href="css/styles-v2.css">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#111827">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body class="smooth-antialiased">
+    
+    <!-- Efeito de raios -->
+    <div id="lightning-effect" class="lightning-effect"></div>
+    
+    <!-- Background 3D -->
+    <div id="dynamic-background"></div>
+    
+    <!-- Header -->
+    <header class="fixed top-0 w-full bg-gray-900 bg-opacity-95 backdrop-blur-sm z-50 border-b border-gray-700">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <div class="w-10 h-10 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-bolt text-white"></i>
+                    </div>
+                    <span class="text-xl font-bold text-gradient">DeiviTech</span>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#services" class="text-gray-300 hover:text-cyan-400 transition-colors">Serviços</a>
+                    <a href="#career" class="text-gray-300 hover:text-cyan-400 transition-colors">Carreira</a>
+                    <a href="#contact" class="text-gray-300 hover:text-cyan-400 transition-colors">Contato</a>
+                </div>
+                
+                <button id="mobile-menu-btn" class="md:hidden text-gray-300 hover:text-cyan-400">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
+        <div class="container mx-auto px-6 text-center z-10">
+            <div class="max-w-4xl mx-auto">
+                <h1 class="text-5xl md:text-7xl font-bold mb-6">
+                    <span class="text-gradient">Transforme Ideias</span><br>
+                    <span class="text-white">em Realidade com IA</span>
+                </h1>
+                
+                <p class="text-xl md:text-2xl text-gray-300 mb-8">
+                    Consultoria especializada em inovação tecnológica e desenvolvimento de soluções digitais inteligentes
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+                    <button onclick="scrollToContact()" class="btn btn-primary text-lg px-8 py-4">
+                        <i class="fas fa-rocket mr-2"></i>
+                        Começar Projeto
+                    </button>
+                    <button onclick="scrollToServices()" class="btn btn-secondary text-lg px-8 py-4">
+                        <i class="fas fa-play-circle mr-2"></i>
+                        Ver Demonstração
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-cyan-400">500+</div>
+                        <div class="text-gray-400">Projetos Entregues</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-purple-400">98%</div>
+                        <div class="text-gray-400">Satisfação</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-cyan-400">24/7</div>
+                        <div class="text-gray-400">Suporte</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-purple-400">50ms</div>
+                        <div class="text-gray-400">Latência</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Services Section -->
+    <section id="services" class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    <span class="text-gradient">Serviços</span> de Inovação
+                </h2>
+                <p class="text-xl text-gray-300">Soluções tecnológicas completas para sua empresa</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Service Card 1 -->
+                <div class="service-card gpu-accelerated">
+                    <div class="service-card-content">
+                        <div class="text-4xl mb-4 text-cyan-400">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Consultoria IA</h3>
+                        <p class="text-gray-300 mb-4">
+                            Implementação de inteligência artificial para otimizar processos e tomar decisões baseadas em dados.
+                        </p>
+                        <ul class="text-gray-400 space-y-2">
+                            <li><i class="fas fa-check text-cyan-400 mr-2"></i>Chatbots personalizados</li>
+                            <li><i class="fas fa-check text-cyan-400 mr-2"></i>Análise preditiva</li>
+                            <li><i class="fas fa-check text-cyan-400 mr-2"></i>Automação inteligente</li>
+                        </ul>
+                        <button class="btn btn-primary mt-4 w-full">
+                            <i class="fas fa-arrow-right mr-2"></i>
+                            Saiba Mais
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Service Card 2 -->
+                <div class="service-card gpu-accelerated">
+                    <div class="service-card-content">
+                        <div class="text-4xl mb-4 text-purple-400">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Desenvolvimento Web</h3>
+                        <p class="text-gray-300 mb-4">
+                            Sites e aplicações web modernas, rápidas e responsivas com as melhores tecnologias.
+                        </p>
+                        <ul class="text-gray-400 space-y-2">
+                            <li><i class="fas fa-check text-purple-400 mr-2"></i>React/Next.js</li>
+                            <li><i class="fas fa-check text-purple-400 mr-2"></i>Node.js/Bun</li>
+                            <li><i class="fas fa-check text-purple-400 mr-2"></i>Progressive Web Apps</li>
+                        </ul>
+                        <button class="btn btn-primary mt-4 w-full">
+                            <i class="fas fa-arrow-right mr-2"></i>
+                            Saiba Mais
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Service Card 3 -->
+                <div class="service-card gpu-accelerated">
+                    <div class="service-card-content">
+                        <div class="text-4xl mb-4 text-cyan-400">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Apps Mobile</h3>
+                        <p class="text-gray-300 mb-4">
+                            Aplicativos nativos e híbridos para iOS e Android com experiência excepcional.
+                        </p>
+                        <ul class="text-gray-400 space-y-2">
+                            <li><i class="fas fa-check text-cyan-400 mr-2"></i>React Native</li>
+                            <li><i class="fas fa-check text-cyan-400 mr-2"></i>Flutter</li>
+                            <li><i class="fas fa-check text-cyan-400 mr-2"></i>Integração com APIs</li>
+                        </ul>
+                        <button class="btn btn-primary mt-4 w-full">
+                            <i class="fas fa-arrow-right mr-2"></i>
+                            Saiba Mais
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Career Boost Section -->
+    <section id="career" class="py-20 bg-gray-800 bg-opacity-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    Potencialize sua <span class="text-gradient">Carreira</span>
+                </h2>
+                <p class="text-xl text-gray-300">Descubra como a tecnologia pode revolucionar sua profissão</p>
+            </div>
+            
+            <div class="max-w-2xl mx-auto">
+                <div class="bg-gray-800 rounded-lg p-8 border border-gray-700">
+                    <div class="mb-6">
+                        <label class="form-label">Sua Profissão:</label>
+                        <div class="flex gap-3">
+                            <input 
+                                type="text" 
+                                id="profession-input"
+                                class="form-input flex-1"
+                                placeholder="Ex: Contador, Médico, Advogado..."
+                            >
+                            <button 
+                                id="analyze-profession-btn"
+                                class="btn btn-primary"
+                            >
+                                <i class="fas fa-search mr-2"></i>
+                                Analisar
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Loader (hidden por default) -->
+                    <div id="profession-loader" class="hidden text-center py-8">
+                        <div class="loader justify-center mb-4">
+                            <div class="loader-dot"></div>
+                            <div class="loader-dot"></div>
+                            <div class="loader-dot"></div>
+                        </div>
+                        <p id="profession-analysis-text" class="text-gray-400">Analisando...</p>
+                    </div>
+                    
+                    <!-- Results (hidden por default) -->
+                    <div id="profession-analysis-result" class="hidden">
+                        <div class="mb-6">
+                            <div class="progress-bar mb-4">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <canvas id="professionImpactChart" width="400" height="200"></canvas>
+                        </div>
+                        <div id="profession-analysis-content">
+                            <!-- Content será injetado dinamicamente -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact Section -->
+    <section id="contact" class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">
+                    Vamos <span class="text-gradient">Conversar</span>
+                </h2>
+                <p class="text-xl text-gray-300">Transforme suas ideias em projetos reais</p>
+            </div>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Contact Form -->
+                    <div class="bg-gray-800 rounded-lg p-8 border border-gray-700">
+                        <h3 class="text-2xl font-bold text-white mb-6">Iniciar Conversa</h3>
+                        
+                        <form id="contact-form" class="space-y-4">
+                            <div class="form-group">
+                                <label class="form-label">Nome *</label>
+                                <input 
+                                    type="text" 
+                                    id="contact-name"
+                                    class="form-input"
+                                    required
+                                    placeholder="Seu nome completo"
+                                >
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Email *</label>
+                                <input 
+                                    type="email" 
+                                    id="contact-email"
+                                    class="form-input"
+                                    required
+                                    placeholder="seu@email.com"
+                                >
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Telefone</label>
+                                <input 
+                                    type="tel" 
+                                    id="contact-phone"
+                                    class="form-input"
+                                    placeholder="(00) 00000-0000"
+                                >
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Mensagem *</label>
+                                <textarea 
+                                    id="message-input"
+                                    class="form-input form-textarea"
+                                    required
+                                    rows="4"
+                                    placeholder="Descreva seu projeto ou ideia..."
+                                ></textarea>
+                            </div>
+                            
+                            <div class="flex gap-3">
+                                <button type="submit" class="btn btn-primary flex-1">
+                                    <i class="fas fa-paper-plane mr-2"></i>
+                                    Enviar Mensagem
+                                </button>
+                                <button 
+                                    type="button"
+                                    id="explore-idea-btn"
+                                    class="btn btn-secondary"
+                                >
+                                    <i class="fas fa-magic mr-2"></i>
+                                    Explorar com IA
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Contact Info -->
+                    <div class="space-y-6">
+                        <div class="bg-gray-800 rounded-lg p-8 border border-gray-700">
+                            <h3 class="text-2xl font-bold text-white mb-6">Informações</h3>
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-12 h-12 bg-cyan-500 bg-opacity-20 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-envelope text-cyan-400"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold text-white">Email</div>
+                                        <div class="text-gray-400">deivilsantana@outlook.com</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-12 h-12 bg-purple-500 bg-opacity-20 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-phone text-purple-400"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold text-white">WhatsApp</div>
+                                        <div class="text-gray-400">(75) 98123-1019</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-12 h-12 bg-green-500 bg-opacity-20 rounded-lg flex items-center justify-center">
+                                        <i class="fab fa-github text-green-400"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold text-white">GitHub</div>
+                                        <div class="text-gray-400">github.com/deivisan</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-800 rounded-lg p-8 border border-gray-700">
+                            <h3 class="text-xl font-bold text-white mb-4">Tempo de Resposta</h3>
+                            <div class="grid grid-cols-2 gap-4 text-center">
+                                <div>
+                                    <div class="text-2xl font-bold text-cyan-400">&lt; 1h</div>
+                                    <div class="text-sm text-gray-400">WhatsApp</div>
+                                </div>
+                                <div>
+                                    <div class="text-2xl font-bold text-purple-400">&lt; 24h</div>
+                                    <div class="text-sm text-gray-400">Email</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="py-12 bg-gray-900 border-t border-gray-700">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <div class="flex items-center space-x-2 mb-2">
+                        <div class="w-8 h-8 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-bolt text-white text-sm"></i>
+                        </div>
+                        <span class="text-lg font-bold text-gradient">DeiviTech</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        © 2026 Deivison Santana. Todos os direitos reservados.
+                    </p>
+                </div>
+                
+                <div class="flex space-x-6">
+                    <a href="https://github.com/deivisan" target="_blank" class="text-gray-400 hover:text-cyan-400 transition-colors">
+                        <i class="fab fa-github text-xl"></i>
+                    </a>
+                    <a href="https://linkedin.com/in/deivisonlsantana" target="_blank" class="text-gray-400 hover:text-cyan-400 transition-colors">
+                        <i class="fab fa-linkedin text-xl"></i>
+                    </a>
+                    <a href="https://wa.me/5575981231019" target="_blank" class="text-gray-400 hover:text-cyan-400 transition-colors">
+                        <i class="fab fa-whatsapp text-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Modal IA Response -->
+    <div id="ai-response-modal" class="modal hidden">
+        <div class="modal-content max-w-3xl mx-auto p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gradient">
+                    <i class="fas fa-magic mr-2"></i>
+                    Esboço da Sua Ideia
+                </h3>
+                <button onclick="closeAiModal()" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <!-- Progresso -->
+            <div id="ai-loader" class="text-center py-8">
+                <div class="loader justify-center mb-4">
+                    <div class="loader-dot"></div>
+                    <div class="loader-dot"></div>
+                    <div class="loader-dot"></div>
+                </div>
+                <div class="progress-bar mb-4">
+                    <div id="ai-progress-bar" class="progress-fill" style="width: 0%"></div>
+                </div>
+                <div class="text-gray-400">
+                    <span id="ai-progress-percent">0%</span> - 
+                    <span id="ai-progress-text">Preparando análise...</span>
+                </div>
+            </div>
+            
+            <!-- Content -->
+            <div id="ai-response-content" class="hidden">
+                <!-- Será injetado dinamicamente -->
+            </div>
+            
+            <!-- Actions -->
+            <div class="flex gap-3 mt-6">
+                <button id="regenerate-idea-btn" class="btn btn-secondary">
+                    <i class="fas fa-sync mr-2"></i>
+                    Gerar Mais Ideias
+                </button>
+                <button id="generate-5-creative-ideas-btn" class="btn btn-secondary">
+                    <i class="fas fa-lightbulb mr-2"></i>
+                    5 Ideias Criativas
+                </button>
+                <button id="send-ai-idea-btn" class="btn btn-primary">
+                    <i class="fas fa-paper-plane mr-2"></i>
+                    Enviar Proposta
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="js/gemini-config-v2.js"></script>
+    <script src="js/main-v2.js"></script>
+    
+    <!-- Global Functions -->
+    <script>
+        function scrollToServices() {
+            document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function scrollToContact() {
+            document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function closeAiModal() {
+            document.getElementById('ai-response-modal')?.classList.add('hidden');
+        }
+        
+        // Mobile menu
+        document.getElementById('mobile-menu-btn')?.addEventListener('click', () => {
+            // Implementar menu mobile
+        });
+    </script>
+</body>
+</html>
